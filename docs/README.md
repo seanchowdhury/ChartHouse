@@ -22,7 +22,7 @@ following criteria with smooth, big-free navigation, adequate seed data and suff
 - [ ] Implement inclement weather alerts.
 - [ ] BONUS: Search public charts by user and location.
 - [ ] BONUS: Implement friending and following features.
-- [ ] Production README [sample](docs/production_readme.md)
+- [ ] Production README
 
 ## Design Docs
 
@@ -31,6 +31,12 @@ following criteria with smooth, big-free navigation, adequate seed data and suff
 * [API endpoints][api-endpoints]
 * [DB schema][schema]
 * [Sample State][sample-state]
+
+[wireframes]: /docs/wireframes
+[components]: /docs/component-hierarchy.md
+[sample-state]: /docs/sample-state.md
+[api-endpoints]: /docs/api-endpoints.md
+[schema]: /docs/schema.md
 
 ## Implementation Timeline
 
