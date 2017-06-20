@@ -61,8 +61,9 @@ class Auth extends React.Component {
   renderFields() {
     if (this.isLogin()) {
       return (
-        <div>
-          <h3>Log in with email</h3>
+        <div className='form-items'>
+          <p>Log in</p>
+          <p>Log in with email</p>
           <input type="text"
             value={this.state.email}
             onChange={this.update('email')}
@@ -73,11 +74,12 @@ class Auth extends React.Component {
               onChange={this.update('password')}
               className="login-input"
               placeholder="Password"/>
+            <button className="auth-button" type="submit" value="Log in">Log in</button>
         </div>
       )
     } else {
       return (
-        <div>
+        <div className='form-items'>
           <p>Sign up with your email address</p>
           <input type="text"
             value={this.state.fname}
@@ -99,6 +101,7 @@ class Auth extends React.Component {
               onChange={this.update('password')}
               className="login-input"
               placeholder="Password"/>
+            <button className="auth-button" type="submit" value="Sign up">Sign up</button>
         </div>
       )
     }
@@ -111,12 +114,10 @@ class Auth extends React.Component {
           <h2>AHOY</h2> {this.headerLink()}
         </section>
         <section>
-          <h2>{this.props.formType}</h2>
           <div className="login-form">
-            <form onSubmit={this.handleSubmit} className="login-form-box">
+            <form onSubmit={this.handleSubmit}>
               {this.renderErrors()}
               {this.renderFields()}
-              <input type="submit" value="Submit" />
             </form>
           </div>
         </section>

@@ -1,0 +1,77 @@
+body {
+    background-image: url("login_background.jpg");
+    background-size: auto;
+}
+
+.login-form {
+  font-family: 'Yantramanav', sans-serif;
+  font-weight: 100;
+  background-color: black;
+  opacity: 0.8;
+  color: white;
+  width: 400px;
+  height: 560px;
+
+  vertical-align: middle;
+}
+::selection {
+  background: red;
+}
+
+input[type="text"]
+{
+  font-size: 14px;
+  padding: 11px 10px;
+  transition: all 0.1s linear;
+  background: rgba(0,0,0,0.5);
+  border: 1px solid #666;
+  color: black;
+}
+
+input[type="password"]
+{
+  font-size: 14px;
+  padding: 11px 10px;
+  transition: all 0.1s linear;
+  background: rgba(0,0,0,0.5);
+  border: 1px solid #666;
+  color: #CCC;
+}
+
+.auth-button {
+  color: white;
+  background-color: #FC4C02;
+  border-color: #FC4C02;
+  width: 322px;
+  height: 40px;
+  margin-top: 30px;
+  margin-left: 10px;
+  margin-right: 10px;
+  border-radius: 3px;
+}
+
+.form-items {
+  // display: block;
+  // text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  // align-content: space-around;
+  padding-top: 20%;
+}
+
+.login-input {
+  margin: 10px;
+  background-color: rgba(0, 0, 0, 0.8);
+  width: 300px;
+  max-height: 40px;
+  border: 1px solid grey;
+}
+
+.login-input:focus {
+  background-color: white;
+}
+
+.auth-button:hover {
+  background-color: #ed4600;
+}
