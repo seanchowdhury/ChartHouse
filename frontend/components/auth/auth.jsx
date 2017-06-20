@@ -34,9 +34,9 @@ class Auth extends React.Component {
 
   headerLink() {
     if (this.isLogin()) {
-      return <Link to="/signup">Sign Up</Link>;
+      return <Link className='header-link' to="/signup">Sign Up</Link>;
     } else {
-      return <Link to="/login">Log In</Link>;
+      return <Link className='header-link' to="/login">Log In</Link>;
     }
   }
 
@@ -109,17 +109,16 @@ class Auth extends React.Component {
 
   render() {
     return (
-      <div>
+      <div className='auth-items'>
         <section className='auth-header'>
-          <h2>AHOY</h2> {this.headerLink()}
+          <div className='logo'>LOGO</div>
+          {this.headerLink()}
         </section>
-        <section>
-          <div className="login-form">
-            <form onSubmit={this.handleSubmit}>
-              {this.renderErrors()}
-              {this.renderFields()}
-            </form>
-          </div>
+        <section className="login-form">
+          <form onSubmit={this.handleSubmit}>
+            {this.renderErrors()}
+            {this.renderFields()}
+          </form>
         </section>
       </div>
     )

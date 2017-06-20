@@ -1,6 +1,21 @@
+html,body { height:100%; }
+
 body {
     background-image: url("login_background.jpg");
-    background-size: auto;
+    background-size: cover;
+}
+
+.auth-button {
+  color: white;
+  background-color: #FC4C02;
+  border-color: #FC4C02;
+  width: 322px;
+  height: 40px;
+  margin-top: 30px;
+  margin-left: 10px;
+  margin-right: 10px;
+  border-radius: 3px;
+  opacity: 1.0;
 }
 
 .login-form {
@@ -11,9 +26,11 @@ body {
   color: white;
   width: 400px;
   height: 560px;
-
-  vertical-align: middle;
+  display: flex;
+  flex-direction: column;
+  margin: 50px;
 }
+
 ::selection {
   background: red;
 }
@@ -38,25 +55,11 @@ input[type="password"]
   color: #CCC;
 }
 
-.auth-button {
-  color: white;
-  background-color: #FC4C02;
-  border-color: #FC4C02;
-  width: 322px;
-  height: 40px;
-  margin-top: 30px;
-  margin-left: 10px;
-  margin-right: 10px;
-  border-radius: 3px;
-}
 
 .form-items {
-  // display: block;
-  // text-align: center;
   display: flex;
   flex-direction: column;
   align-items: center;
-  // align-content: space-around;
   padding-top: 20%;
 }
 
@@ -74,4 +77,38 @@ input[type="password"]
 
 .auth-button:hover {
   background-color: #ed4600;
+}
+
+.auth-items {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.auth-header {
+  height: 60px;
+  background-color: white;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+}
+
+.logo {
+  margin-left: 30%;
+  margin-top: 25px;
+}
+
+.header-link {
+  margin-right: 30%;
+  margin-top: 25px;
+  margin-bottom: 10px;
+  padding: 5px;
+  border: 1px solid grey;
+
+  -webkit-appearance: button;
+  -moz-appearance: button;
+  appearance: button;
+
+  text-decoration: none;
+  color: initial;
 }
