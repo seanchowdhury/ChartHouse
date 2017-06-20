@@ -4,7 +4,6 @@ import { Link, withRouter } from 'react-router-dom';
 class Splash extends React.Component {
 
   render() {
-    debugger
     return (
       <div>
         Here to join?
