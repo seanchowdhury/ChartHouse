@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { signup, login } from '../../actions/session_actions';
+import { signup, login, clearErrors } from '../../actions/session_actions';
 
 class Auth extends React.Component {
   constructor(props) {
@@ -21,8 +21,8 @@ class Auth extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (nextProps.loggedIn) {
-      this.props.history.push('/dashboard');
+    if (nextProps.formType != this.props.formType) {
+      this.props.clearErrors();
     }
   }
 
@@ -48,7 +48,7 @@ class Auth extends React.Component {
 
   renderErrors() {
     return(
-      <ul>
+      <ul className='form-items'>
         {this.props.errors.map((error, i) => (
           <li key={`error-${i}`}>
             {error}
@@ -62,8 +62,8 @@ class Auth extends React.Component {
     if (this.isLogin()) {
       return (
         <div className='form-items'>
-          <p>Log in</p>
-          <p>Log in with email</p>
+          <h2 className='login-title'>Log in</h2>
+          <p className='enticing-text'>Log in with email</p>
           <input type="text"
             value={this.state.email}
             onChange={this.update('email')}
@@ -80,7 +80,7 @@ class Auth extends React.Component {
     } else {
       return (
         <div className='form-items'>
-          <p>Sign up with your email address</p>
+          <p className='enticing-text'>Sign up with your email address</p>
           <input type="text"
             value={this.state.fname}
             onChange={this.update('fname')}
@@ -116,8 +116,8 @@ class Auth extends React.Component {
         </section>
         <section className="login-form">
           <form onSubmit={this.handleSubmit}>
-            {this.renderErrors()}
             {this.renderFields()}
+            {this.renderErrors()}
           </form>
         </section>
       </div>
@@ -125,10 +125,6 @@ class Auth extends React.Component {
   }
 
 }
-
-
-
-
 
 
 const mapStateToProps = ({session}) => ({
@@ -139,6 +135,7 @@ const mapDispatchToProps = (dispatch, { location }) => {
   const formType = location.pathname.slice(1);
   const processForm = (formType === 'login') ? login : signup;
   return {
+    clearErrors: () => dispatch(clearErrors()),
     processForm: user => dispatch(processForm(user)),
     formType
   };
