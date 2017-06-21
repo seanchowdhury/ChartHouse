@@ -1,6 +1,11 @@
-json.extract! user, :id, :email, :fname, :lname
+json.user do
+  json.extract! user, :id, :email, :fname, :lname
+end
+
 json.courses do
   user.courses.each do |course|
-    json.extract! course, :id, :title, :description
+    json.set! course.id do
+      json.extract! course, :id, :title, :description
+    end
   end
 end

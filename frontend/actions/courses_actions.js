@@ -8,7 +8,7 @@ export const receiveCourses = courses => ({
 });
 
 
-export const fetchCourses = user => dispatch => {
+export const fetchCoursesForUser = (user) => dispatch => {
   return ApiUtil.fetchCourses(user)
-    .then( courses => dispatch(receiveCourses(courses)));
+    .then(user => dispatch(receiveCurrentUser(user)));
 };

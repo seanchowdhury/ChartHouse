@@ -2,29 +2,32 @@ import React from 'react';
 import { Link, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import values from 'lodash/values';
+import DashboardNav from '../dashboard/dashboard_header';
 
 class CoursesIndex extends React.Component {
   constructor(props) {
     super(props);
   }
 
-  componentDidMount() {
-    //request courses
-
-  }
-
   render() {
     const courseList = this.props.courses.map((course) => {
       return <li key={course.id}>{course.title}</li>;
     });
-    return ( <ul>{this.props.courses.title}</ul> );
+    return (
+      <div>
+        <DashboardNav />
+        <div>
+          <ul>{courseList}</ul>
+        </div>
+      </div>
+     );
   }
 }
 
-const mapStateToProps = (state) => {
-  const coursesArray = values(state.courses);
+const mapStateToProps = ({courses}) => {
+  const coursesArray = values(courses);
   return {
-  courses
+  courses: coursesArray
 };
 };
 
