@@ -2,6 +2,7 @@ import React from 'react';
 import { Link, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { signup, login, clearErrors } from '../../actions/session_actions';
+import values from 'lodash/values';
 
 class Auth extends React.Component {
   constructor(props) {
@@ -42,20 +43,9 @@ class Auth extends React.Component {
 
   handleSubmit(e) {
     e.preventDefault();
+
     const user = this.state;
     this.props.processForm({user});
-  }
-
-  renderErrors() {
-    return(
-      <ul className='form-items'>
-        {this.props.errors.map((error, i) => (
-          <li key={`error-${i}`}>
-            {error}
-          </li>
-        ))}
-      </ul>
-    );
   }
 
   renderFields() {
@@ -69,11 +59,14 @@ class Auth extends React.Component {
             onChange={this.update('email')}
             className="login-input"
             placeholder="Your Email"/>
+          <p className='error'> {this.props.errors.email}</p>
           <input type="password"
               value={this.state.password}
               onChange={this.update('password')}
               className="login-input"
               placeholder="Password"/>
+            <p className='error'> {this.props.errors.password}</p>
+            <p className='error'> {this.props.errors.base}</p>
             <button className="auth-button" type="submit" value="Log in">Log in</button>
         </div>
       )
@@ -86,22 +79,26 @@ class Auth extends React.Component {
             onChange={this.update('fname')}
             className="login-input"
             placeholder="First Name"/>
+          <p className='error'> {this.props.errors.fname}</p>
           <input type="text"
             value={this.state.lname}
             onChange={this.update('lname')}
             className="login-input"
             placeholder="Last Name"/>
+          <p className='error'> {this.props.errors.lname}</p>
           <input type="text"
             value={this.state.email}
             onChange={this.update('email')}
             className="login-input"
             placeholder="Your Email"/>
+          <p className='error'> {this.props.errors.email}</p>
           <input type="password"
-              value={this.state.password}
-              onChange={this.update('password')}
-              className="login-input"
-              placeholder="Password"/>
-            <button className="auth-button" type="submit" value="Sign up">Sign up</button>
+            value={this.state.password}
+            onChange={this.update('password')}
+            className="login-input"
+            placeholder="Password"/>
+          <p className='error'> {this.props.errors.password}</p>
+          <button className="auth-button" type="submit" value="Sign up">Sign up</button>
         </div>
       )
     }
@@ -117,7 +114,6 @@ class Auth extends React.Component {
         <section className="login-form">
           <form onSubmit={this.handleSubmit}>
             {this.renderFields()}
-            {this.renderErrors()}
           </form>
         </section>
       </div>
@@ -127,9 +123,10 @@ class Auth extends React.Component {
 }
 
 
-const mapStateToProps = ({session}) => ({
+const mapStateToProps = ({session}) => {
+  return {
   errors: session.errors
-});
+}};
 
 const mapDispatchToProps = (dispatch, { location }) => {
   const formType = location.pathname.slice(1);

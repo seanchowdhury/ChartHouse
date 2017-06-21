@@ -3,14 +3,11 @@
     currentUser: {
       id: 1,
       email: "seanchowdhury@gmail.com",
-      firstName: "Sean",
-      lastName: "Chowdhury",
+      fName: "Sean",
+      lName: "Chowdhury",
       imageUrl: "seanchowdhury.png"
     },
-    forms: {
-      signUp: {errors: []},
-      logIn: {errors: []},
-      createCourse: {errors: ['Add title/description']}
+    errors: []
     }
   },
   boats: {

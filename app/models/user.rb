@@ -1,11 +1,16 @@
 class User < ActiveRecord::Base
-  validates_presence_of :email, :fname, :lname, :password_digest, :session_token
+  validates_presence_of :password_digest, :session_token
+  validates :email, presence: { message: "Provide a valid email"}
+  validates :fname, presence: { message: "Please enter first name"}
+  validates :lname, presence: { message: "Please enter last name"}
   validates_uniqueness_of :email
   validates :password, length: {minimum: 6}, allow_nil: true
 
   attr_reader :password
   after_initialize :ensure_session_token
   before_validation :ensure_session_token_uniqueness
+
+  has_many :courses
 
   def password=(password)
     @password = password
