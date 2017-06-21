@@ -9,25 +9,41 @@ class DashboardNav extends React.Component {
   }
 
   showDash() {
-    document.getElementById('dropdown').style.display = 'block';
+    document.getElementById('dash-dropdown').style.display = 'block';
   }
 
   hideDash() {
-    document.getElementById('dropdown').style.display = 'none';
+    document.getElementById('dash-dropdown').style.display = 'none';
   }
+
+  showUser() {
+    document.getElementById('user-dropdown').style.display = 'block';
+  }
+
+  hideUser() {
+    document.getElementById('user-dropdown').style.display = 'none';
+  }
+
 
   render() {
     return (
       <div className='navbar'>
-        <Link to="/dashboard"><h1 className='logo'>AHOY</h1></Link>
-        <ul className='nav-links group'>
+         <ul className='navbar-left'>
+          <li className='navbar-link'><Link to="/dashboard"><h1>AHOY</h1></Link></li>
           <li className='navbar-link' onMouseOver={this.showDash} onMouseLeave={this.hideDash}>Dashboard
-            <ul id='dropdown'>
-              <li><Link to='/myroutes'>Routes</Link></li>
+            <ul id='dash-dropdown' className='dropdown'>
+              <li><Link to='/mycourses'>Courses</Link></li>
             </ul>
           </li>
         </ul>
-        <button className='navbar-link' onClick={this.props.logout}>Log Out</button>
+
+        <ul className='navbar-right'>
+          <li className='navbar-link' onMouseOver={this.showUser} onMouseLeave={this.hideUser}>User Settings
+            <ul id='user-dropdown' className='dropdown'>
+              <li><button onClick={this.props.logout}>Logout</button></li>
+            </ul>
+          </li>
+        </ul>
       </div>
     );
   }
