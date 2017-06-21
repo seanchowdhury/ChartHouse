@@ -11,6 +11,7 @@ import {
 import Auth from './auth/auth';
 import Splash from './splash/splash';
 import DashboardNav from './dashboard/dashboard_header';
+import CoursesIndex from './courses/courses_index.jsx';
 import { AuthRoute, ProtectedRoute } from '../util/route_util';
 
 
@@ -23,6 +24,7 @@ const App = () => (
       <AuthRoute path="/signup" component={Auth} />
       <AuthRoute path="/login" component={Auth} />
       <ProtectedRoute path="/dashboard" component={DashboardNav} />
+      <ProtectedRoute path="/mycourses" component={CoursesIndex} />
     </Switch>
   </div>
 );

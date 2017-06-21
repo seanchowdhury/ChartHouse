@@ -1,6 +1,10 @@
 import { RECEIVE_CURRENT_USER, RECEIVE_ERRORS, CLEAR_ERRORS } from '../actions/session_actions';
 
-const SessionReducer = (state = { currentUser: null, errors: [] }, action) => {
+const defaultState = {
+  currentUser: null,
+  errors: [] };
+
+const SessionReducer = (state= defaultState, action) => {
   Object.freeze(state);
   switch (action.type) {
     case RECEIVE_CURRENT_USER:
