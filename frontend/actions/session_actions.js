@@ -4,12 +4,11 @@ export const RECEIVE_CURRENT_USER = 'RECEIVE_CURRENT_USER';
 export const RECEIVE_ERRORS = 'RECEIVE_ERRORS';
 export const CLEAR_ERRORS = 'CLEAR_ERRORS';
 
-export const receiveCurrentUser = ({user, courses}) => {
-  return {
+export const receiveCurrentUser = ({user, courses}) => ({
   type: RECEIVE_CURRENT_USER,
   currentUser: user,
-  courses
-};};
+  courses,
+});
 
 export const receiveErrors = (errors) => ({
   type: RECEIVE_ERRORS,
