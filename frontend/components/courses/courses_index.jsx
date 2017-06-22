@@ -13,7 +13,7 @@ class CoursesIndex extends React.Component {
   render() {
     const courseList = this.props.courses.map((course) => {
       return <li key={course.id}>
-        <CourseMap />
+        <CourseMap polyline='course.polyline' />
         <br />
         {course.title}
       </li>;
