@@ -1,3 +1,13 @@
 // Place all the styles related to the api::courses controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
+
+#course-map-container {
+  height: 175px;
+  width: 278px;
+}
+
+.map-cards {
+  display: flex;
+  justify-content: space-between;
+}

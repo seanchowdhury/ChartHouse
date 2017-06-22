@@ -3,6 +3,7 @@ import { Link, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import values from 'lodash/values';
 import DashboardNav from '../dashboard/dashboard_header';
+import CourseMap from './course_map';
 
 class CoursesIndex extends React.Component {
   constructor(props) {
@@ -11,13 +12,17 @@ class CoursesIndex extends React.Component {
 
   render() {
     const courseList = this.props.courses.map((course) => {
-      return <li key={course.id}>{course.title}</li>;
+      return <li key={course.id}>
+        <CourseMap />
+        <br />
+        {course.title}
+      </li>;
     });
     return (
       <div>
         <DashboardNav />
         <div>
-          <ul>{courseList}</ul>
+          <ul className='map-cards'>{courseList}</ul>
         </div>
       </div>
      );

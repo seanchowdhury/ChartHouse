@@ -32,7 +32,8 @@ class DashboardNav extends React.Component {
           <li className='navbar-link'><Link to="/dashboard"><h1>AHOY</h1></Link></li>
           <li className='navbar-link' onMouseOver={this.showDash} onMouseLeave={this.hideDash}>Dashboard
             <ul id='dash-dropdown' className='dropdown'>
-              <li><Link to='/mycourses'>Courses</Link></li>
+              <li className='dropdown-link'><Link to='/mycourses'>Courses</Link></li>
+              <li className='dropdown-link'>YEESSSS</li>
             </ul>
           </li>
         </ul>
@@ -40,7 +41,7 @@ class DashboardNav extends React.Component {
         <ul className='navbar-right'>
           <li className='navbar-link' onMouseOver={this.showUser} onMouseLeave={this.hideUser}>User Settings
             <ul id='user-dropdown' className='dropdown'>
-              <li><button onClick={this.props.logout}>Logout</button></li>
+              <li className='dropdown-link'><button onClick={this.props.logout}>Logout</button></li>
             </ul>
           </li>
         </ul>
@@ -51,7 +52,7 @@ class DashboardNav extends React.Component {
 }
 
 
-const mapStateToProps = (state) => {
+const mapStateToProps = (state, ownProps) => {
   return {
   currentUser: state.session.currentUser
 };

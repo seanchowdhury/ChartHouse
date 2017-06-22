@@ -7,10 +7,14 @@
 }
 
 .dropdown {
+  display: flex;
+  position: absolute;
   display: none;
-  border-right: 1px solid lightgrey;
-  border-left: 1px solid lightgrey;
-  border-bottom: 1px solid lightgrey;
+  border-right: 1px solid grey;
+  border-left: 1px solid grey;
+  border-bottom: 1px solid grey;
+  margin-top: 20px;
+  padding-right: 70px;
 }
 
 .navbar-left {
@@ -18,8 +22,11 @@
   margin-left: 10%;
 }
 
-.navbar-left:hover {
+.navbar-link:hover {
   color: orange;
+  border-left: 1px solid grey;
+  border-right: 1px solid grey;
+  outline: 1px solid white;
 }
 
 .navbar-right {
@@ -28,7 +35,13 @@
 }
 
 .navbar-link {
-  margin-top: 20px;
-  margin-left: 12px;
-  margin-right: 12px;
+  display: flex;
+  flex-direction: column;
+  padding-top: 20px;
+  padding-left: 30px;
+  padding-right: 30px;
+}
+
+.dropdown-link {
+
 }
