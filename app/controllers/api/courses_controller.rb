@@ -9,6 +9,7 @@ class Api::CoursesController < ApplicationController
       render "api/courses/show"
     else
       render json: @course.errors.messages, status: 422
+    end
   end
 
   def destroy
