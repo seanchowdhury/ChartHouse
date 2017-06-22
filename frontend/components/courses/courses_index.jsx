@@ -3,7 +3,7 @@ import { Link, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import values from 'lodash/values';
 import DashboardNav from '../dashboard/dashboard_header';
-import CourseMap from './course_map';
+import Map from '../map/map';
 
 class CoursesIndex extends React.Component {
   constructor(props) {

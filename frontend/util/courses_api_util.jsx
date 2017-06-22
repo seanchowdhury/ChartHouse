@@ -6,17 +6,10 @@ export const createCourse = (course) => {
   });
 };
 
-export const requestCourse = (course) => {
+export const recieveCourse = (course) => {
   return $.ajax({
     method: 'GET',
     url: '/api/courses',
     data: `api/courses/${course}`
-  });
-};
-
-export const requestCourses = (user) => {
-  return $.ajax({
-    method: 'GET',
-    url: `/api/users/${user}`
   });
 };

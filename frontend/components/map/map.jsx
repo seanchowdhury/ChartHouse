@@ -3,11 +3,12 @@ import ReactDOM from 'react-dom';
 import { withRouter } from 'react-router-dom';
 
 
-class CourseMap extends React.Component {
+class Map extends React.Component {
   componentDidMount() {
     const mapOptions = {
       center: { lat: 37.77, lng: -122.435 },
-      zoom: 13
+      zoom: 13,
+      style: mapStyle
     };
     this.map = new google.maps.Map(this.mapNode, mapOptions );
   }
@@ -21,4 +22,4 @@ class CourseMap extends React.Component {
   }
 }
 
-export default withRouter(CourseMap);
+export default withRouter(Map);
