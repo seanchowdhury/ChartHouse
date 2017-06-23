@@ -1,7 +1,8 @@
 import React from 'react';
 import { Link, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { signup, login, clearErrors } from '../../actions/session_actions';
+import { signup, login } from '../../actions/session_actions';
+import { clearErrors } from '../../actions/error_actions';
 import values from 'lodash/values';
 
 class Auth extends React.Component {
@@ -123,9 +124,9 @@ class Auth extends React.Component {
 }
 
 
-const mapStateToProps = ({session}) => {
+const mapStateToProps = (state) => {
   return {
-  errors: session.errors
+  errors: state.errors
 }};
 
 const mapDispatchToProps = (dispatch, { location }) => {

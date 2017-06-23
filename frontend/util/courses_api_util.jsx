@@ -1,13 +1,12 @@
 export const createCourse = (course) => {
-  debugger
   return $.ajax({
     method: 'POST',
     url: '/api/courses',
-    data: course
+    data: {course}
   });
 };
 
-export const recieveCourse = (course) => {
+export const receiveCourses = (course) => {
   debugger
   return $.ajax({
     method: 'GET',

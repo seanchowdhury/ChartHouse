@@ -1,13 +1,18 @@
 import * as ApiUtil from '../util/courses_api_util';
+import { receiveErrors } from './error_actions';
 
-export const RECEIVE_COURSE = 'RECEIVE_COURSE';
+export const RECEIVE_COURSES = 'RECEIVE_COURSES';
 
-export const receiveCourse = course => ({
-  type: RECEIVE_COURSE,
-  course
+export const receiveCourses = courses => ({
+  type: RECEIVE_COURSES,
+  courses
 });
 
 export const createCourse = (course) => dispatch => {
   return ApiUtil.createCourse(course)
-    .then(course => dispatch(recieveCourse(course)));
+    .then(course => (
+      dispatch(receiveCourses(course))),
+          err => {
+      return dispatch(receiveErrors(err.responseJSON));
+  });
 };

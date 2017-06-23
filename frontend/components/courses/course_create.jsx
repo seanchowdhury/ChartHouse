@@ -5,6 +5,8 @@ import { withRouter } from 'react-router-dom';
 import { createCourse } from '../../actions/courses_actions';
 import CourseCreateHeader from './course_create_header';
 import Modal from '../modal/modal';
+import merge from 'lodash/merge';
+import { clearErrors } from '../../actions/error_actions';
 
 class CourseCreate extends React.Component {
 
@@ -33,13 +35,23 @@ class CourseCreate extends React.Component {
     };
   }
 
-  saveMap() {
-    const waypoints = google.maps.geometry.encoding.encodePath(this.polyline.getPath());
-    this.setState({
-      course: {waypoints}
+  update(field) {
+    return e => this.setState({
+      course: merge({}, this.state.course, {[field]: e.currentTarget.value})
     });
-    this.props.createCourse(this.state.course);
+  }
 
+  handleSubmit(e) {
+    e.preventDefault();
+    const course = this.course;
+    this.props.createCourse(course);
+  }
+
+  saveMap() {
+    this.props.createCourse(this.state.course)
+      .then( (courses) => {
+
+      })
   }
 
   addMarker(position) {
@@ -104,9 +116,13 @@ class CourseCreate extends React.Component {
     this.polyline = coursePoly;
     coursePoly.setMap(this.map);
     const distance = google.maps.geometry.spherical.computeLength(coursePoly.getPath().getArray()) / 1609.34;
+
+
+    const encryptedWaypoints = google.maps.geometry.encoding.encodePath(this.polyline.getPath());
     this.setState({
       distance,
-      esttime: distance / 2.65 * 3600
+      esttime: distance / 2.65 * 3600,
+      course: merge({}, this.state.course, {waypoints: encryptedWaypoints})
     });
   }
 
@@ -212,24 +228,36 @@ class CourseCreate extends React.Component {
     });
   }
 
+  openModal() {
+    this.setState({ isModalOpen: true });
+  }
+
+  closeModal() {
+    this.setState({ isModalOpen: false });
+  }
+
+
   render() {
+    if (this.state.course.title.length > 0 && this.props.errors.title) {
+      this.props.clearErrors();
+    }
     let renderTime;
     if (this.state.esttime === 0){
       renderTime = '0';} else {
       renderTime = this.state.esttime.toString().toHHMMSS();
       }
-    const bodyText = "Enter a name and description for your route below. On the next page, you'll be able to see, edit, and share your route.";
+    const descriptionText = "Enter a name and description for your route below. On the next page, you'll be able to see, edit, and share your route.";
     return (
       <div>
         <div>
 
           <Modal isOpen={this.state.isModalOpen} onClose={() => this.closeModal()}>
             <h1 className='saveTitle'>Save</h1>
-            <p className='saveBody'>{bodyText}</p>
+            <p className='saveDescription'>{descriptionText}</p>
             <form>
-              <label>Course Name (required)<input onChange={this.update('title')} value={this.state.course.title} /></label>
+              <label>Course Name (required)<input onChange={this.update('title')} value={this.state.course.title} />   {this.props.errors.title}</label>
 
-              <label>Description<textarea onChange={this.update('body')} value={this.state.course.body} /></label>
+              <label>Description<textarea onChange={this.update('description')} value={this.state.course.description} /></label>
             </form>
             <ul>
               <li><button onClick={() => this.closeModal()}>Cancel</button></li>
@@ -268,37 +296,20 @@ class CourseCreate extends React.Component {
     );
   }
 
-  openModal() {
-    this.setState({ isModalOpen: true });
-  }
-
-  closeModal() {
-    this.setState({ isModalOpen: false });
-  }
-
-  update(field) {
-    return e => this.setState({
-      course: {[field]: e.currentTarget.value}
-    });
-  }
-
-  handleSubmit(e) {
-    e.preventDefault();
-    const course = this.course;
-    this.props.createCourse(course);
-  }
 }
 
 
 const mapStateToProps = (state) => {
   return {
-    user_id: state.session.currentUser.id
+    user_id: state.session.currentUser.id,
+    errors: state.errors
   };
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    createCourse: (course) => dispatch(createCourse(course))
+    createCourse: (course) => dispatch(createCourse(course)),
+    clearErrors: () => dispatch(clearErrors())
   };
 };
 

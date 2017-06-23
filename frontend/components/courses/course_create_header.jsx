@@ -10,7 +10,7 @@ class CourseCreateHeader extends React.Component {
         <li><Link to='/'>AHOY</Link></li>
         <li>COURSE CONSTRUCTOR MAXIMUM ULTRA VIOLET SODA ENERGY - BETA</li>
       </ul>
-      <Link to='/mycourses'>Exit Builder</Link>
+      <Link to='/courses'>Exit Builder</Link>
     </div>
   );
   }

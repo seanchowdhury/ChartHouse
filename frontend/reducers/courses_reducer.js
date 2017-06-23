@@ -6,9 +6,9 @@ const CoursesReducer = (state = {}, action) => {
   Object.freeze(state);
   switch (action.type) {
     case RECEIVE_CURRENT_USER:
-      return merge({}, state, action.courses);
+      return action.courses;
     case RECEIVE_COURSES:
-      return action.user.courses;
+      return action.courses;
     default:
       return state;
   }
