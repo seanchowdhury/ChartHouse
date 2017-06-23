@@ -1,5 +1,5 @@
 import { RECEIVE_CURRENT_USER } from '../actions/session_actions';
-import { RECEIVE_COURSES } from '../actions/courses_actions';
+import { RECEIVE_COURSE, RECEIVE_COURSES } from '../actions/courses_actions';
 import merge from 'lodash/merge';
 
 const CoursesReducer = (state = {}, action) => {
@@ -8,7 +8,10 @@ const CoursesReducer = (state = {}, action) => {
     case RECEIVE_CURRENT_USER:
       return action.courses;
     case RECEIVE_COURSES:
+    debugger
       return action.courses;
+    case RECEIVE_COURSE:
+      return merge({}, state, action.course)
     default:
       return state;
   }

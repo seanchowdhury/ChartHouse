@@ -36,9 +36,14 @@ class CourseCreate extends React.Component {
   }
 
   update(field) {
-    return e => this.setState({
-      course: merge({}, this.state.course, {[field]: e.currentTarget.value})
-    });
+    return (e) => {
+      if (field === 'title' && this.props.errors.title) {
+        this.props.clearErrors();
+      }
+      this.setState({
+        course: merge({}, this.state.course, {[field]: e.currentTarget.value})
+      });
+    }
   }
 
   handleSubmit(e) {
@@ -49,9 +54,10 @@ class CourseCreate extends React.Component {
 
   saveMap() {
     this.props.createCourse(this.state.course)
-      .then( (courses) => {
-
-      })
+      .then( ({course}) => {
+        this.props.history.push(`/courses/${Object.keys(course)[0]}`)
+      }
+    )
   }
 
   addMarker(position) {

@@ -6,11 +6,16 @@ export const createCourse = (course) => {
   });
 };
 
-export const receiveCourses = (course) => {
-  debugger
+export const requestCourse = (course) => {
   return $.ajax({
     method: 'GET',
-    url: '/api/courses',
-    data: `api/courses/${course}`
+    url: `/api/courses/${Object.keys(course)[0]}`
   });
-};
+}
+
+export const requestCourses = () => {
+  return $.ajax({
+    method: 'GET',
+    url: '/api/courses'
+  });
+}

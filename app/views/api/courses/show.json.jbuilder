@@ -1,1 +1,3 @@
-json.partial! "api/courses/course", course: @course
+json.set! @course.id do
+  json.extract! @course, :id, :title, :description, :waypoints
+end

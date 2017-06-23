@@ -33,7 +33,7 @@ class DashboardNav extends React.Component {
           <li className='navbar-link' onMouseOver={this.showDash} onMouseLeave={this.hideDash}>Dashboard
             <ul id='dash-dropdown' className='dropdown'>
               <li className='dropdown-link'><Link to='/courses'>Courses</Link></li>
-              <li className='dropdown-link'>YEESSSS</li>
+              <li className='dropdown-link'></li>
             </ul>
           </li>
         </ul>

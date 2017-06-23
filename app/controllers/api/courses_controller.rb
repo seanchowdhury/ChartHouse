@@ -1,5 +1,11 @@
 class Api::CoursesController < ApplicationController
+  def index
+    @courses = Course.where(user_id: current_user.id)
+    render "api/courses/index"
+  end
+
   def show
+    @course = Course.find(id)
     render "api/courses/show"
   end
 
