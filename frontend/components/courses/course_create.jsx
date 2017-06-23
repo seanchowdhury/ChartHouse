@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import { createCourse } from '../../actions/courses_actions';
 import CourseCreateHeader from './course_create_header';
+import Modal from '../modal/modal';
 
 class CourseCreate extends React.Component {
 
@@ -11,7 +12,7 @@ class CourseCreate extends React.Component {
     super(props);
     this.pathMarkers = [];
     this.distance = 0;
-    this.polyline;
+    this.polyline = 0;
     this.saveMap = this.saveMap.bind(this);
     this.clearAll = this.clearAll.bind(this);
     this.renderPolyline = this.renderPolyline.bind(this);
@@ -21,12 +22,23 @@ class CourseCreate extends React.Component {
       lat: 40.728420,
       lng: -74.013389,
       distance: 0,
-      esttime: 0
-    }
+      esttime: 0,
+      isModalOpen: false,
+      course: {
+        user_id: this.props.user_id,
+        title: "",
+        description: "",
+        waypoints: ""
+      }
+    };
   }
 
   saveMap() {
     const waypoints = google.maps.geometry.encoding.encodePath(this.polyline.getPath());
+    this.setState({
+      course: {waypoints}
+    });
+    this.props.createCourse(this.state.course);
 
   }
 
@@ -86,16 +98,16 @@ class CourseCreate extends React.Component {
       path,
       geodesic: true,
       strokeColor: '#FF0000',
-      strokeOpacity: 0.9,
+      strokeOpacity: 1.0,
       strokeWeight: 2
     });
     this.polyline = coursePoly;
     coursePoly.setMap(this.map);
-    const distance = google.maps.geometry.spherical.computeLength(coursePoly.getPath().getArray()) / 1609.34
+    const distance = google.maps.geometry.spherical.computeLength(coursePoly.getPath().getArray()) / 1609.34;
     this.setState({
       distance,
       esttime: distance / 2.65 * 3600
-    })
+    });
   }
 
   componentDidMount() {
@@ -191,8 +203,8 @@ class CourseCreate extends React.Component {
       this.map.setCenter({
         lat: pos.coords.latitude,
         lng: pos.coords.longitude
-      })
-    })
+      });
+    });
 
     this.map = new google.maps.Map(this.mapNode, mapOptions );
     this.map.addListener('click', (e) => {
@@ -206,14 +218,34 @@ class CourseCreate extends React.Component {
       renderTime = '0';} else {
       renderTime = this.state.esttime.toString().toHHMMSS();
       }
+    const bodyText = "Enter a name and description for your route below. On the next page, you'll be able to see, edit, and share your route.";
     return (
       <div>
+        <div>
+
+          <Modal isOpen={this.state.isModalOpen} onClose={() => this.closeModal()}>
+            <h1 className='saveTitle'>Save</h1>
+            <p className='saveBody'>{bodyText}</p>
+            <form>
+              <label>Course Name (required)<input onChange={this.update('title')} value={this.state.course.title} /></label>
+
+              <label>Description<textarea onChange={this.update('body')} value={this.state.course.body} /></label>
+            </form>
+            <ul>
+              <li><button onClick={() => this.closeModal()}>Cancel</button></li>
+              <li><button onClick={() => this.saveMap()}>Save</button></li>
+            </ul>
+          </Modal>
+        </div>
+
+
+
         <CourseCreateHeader />
         <div>
           <ul>
             <li><button onClick={this.undoMarker}>Undo</button></li>
             <li><button onClick={this.clearAll}>Clear</button></li>
-
+            <li><button onClick={() => this.openModal()}>Save</button></li>
         </ul>
         </div>
 
@@ -235,12 +267,32 @@ class CourseCreate extends React.Component {
       </div>
     );
   }
+
+  openModal() {
+    this.setState({ isModalOpen: true });
+  }
+
+  closeModal() {
+    this.setState({ isModalOpen: false });
+  }
+
+  update(field) {
+    return e => this.setState({
+      course: {[field]: e.currentTarget.value}
+    });
+  }
+
+  handleSubmit(e) {
+    e.preventDefault();
+    const course = this.course;
+    this.props.createCourse(course);
+  }
 }
 
 
-const mapStateToProps = ({courses}) => {
+const mapStateToProps = (state) => {
   return {
-
+    user_id: state.session.currentUser.id
   };
 };
 
@@ -265,4 +317,4 @@ String.prototype.toHHMMSS = function () {
     if (minutes < 10) {minutes = "0"+minutes;}
     if (seconds < 10) {seconds = "0"+seconds;}
     return hours+':'+minutes+':'+seconds;
-}
+};

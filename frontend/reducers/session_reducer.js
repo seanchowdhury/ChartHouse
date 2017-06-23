@@ -9,9 +9,9 @@ const SessionReducer = (state= defaultState, action) => {
   Object.freeze(state);
   switch (action.type) {
     case RECEIVE_CURRENT_USER:
-      return { currentUser: action.currentUser, errors: [], currentPos: window.currentPos };
+      return { currentUser: action.currentUser, errors: [] };
     case RECEIVE_ERRORS:
-      return { currentUser: null, errors: action.errors, currentPos: window.currentPos};
+      return { currentUser: null, errors: action.errors };
     case CLEAR_ERRORS:
       return defaultState;
     default:
