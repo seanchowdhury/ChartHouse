@@ -5,7 +5,7 @@ end
 json.courses do
   user.courses.each do |course|
     json.set! course.id do
-      json.extract! course, :id, :title, :description
+      json.extract! course, :id, :title, :description, :waypoints
     end
   end
 end

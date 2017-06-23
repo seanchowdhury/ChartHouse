@@ -8,7 +8,6 @@ const CoursesReducer = (state = {}, action) => {
     case RECEIVE_CURRENT_USER:
       return action.courses;
     case RECEIVE_COURSES:
-    debugger
       return action.courses;
     case RECEIVE_COURSE:
       return merge({}, state, action.course)

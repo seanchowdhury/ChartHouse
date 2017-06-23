@@ -12,6 +12,7 @@
     "babel-loader": "^7.0.0",
     "babel-preset-es2015": "^6.24.1",
     "babel-preset-react": "^6.24.1",
+    "google-maps-image-api-url": "^1.0.3",
     "react": "^15.6.1",
     "react-dom": "^15.6.1",
     "react-redux": "^5.0.5",
@@ -23,7 +24,6 @@
     "webpack": "^3.0.0"
   },
   "devDependencies": {},
-
   "engines": {
     "node": "6.7.0",
     "npm": "3.10.7"
