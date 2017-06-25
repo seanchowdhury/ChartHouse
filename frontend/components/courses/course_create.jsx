@@ -255,9 +255,8 @@ class CourseCreate extends React.Component {
       }
     const descriptionText = "Enter a name and description for your route below. On the next page, you'll be able to see, edit, and share your route.";
     return (
-      <div>
+      <div id='create-page-container'>
         <div>
-
           <Modal isOpen={this.state.isModalOpen} onClose={() => this.closeModal()}>
             <h1 className='saveTitle'>Save</h1>
             <p className='saveDescription'>{descriptionText}</p>
@@ -297,7 +296,7 @@ class CourseCreate extends React.Component {
           </ul>
         </div>
         <div id='course-create-container' ref={ map => this.mapNode = map }>
-          Map
+          map
         </div>
       </div>
     );

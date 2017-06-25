@@ -37,7 +37,7 @@ class CoursesIndex extends React.Component {
       const pathUrl = waypoints.join('|');
       const startMarker = waypoints[0];
       const endMarker = waypoints[waypoints.length-1];
-      const mapUrl = `https://maps.googleapis.com/maps/api/staticmap?size=278x158&style=feature:poi|visibility:off&style=feature:road|visibility:off&style=feature:transit|visibility:off&style=feature:water|color:0x00a9ff&markers=color:green|${startMarker}&markers=color:black|${endMarker}&path=color:0xe20000FF|weight:3|${pathUrl}&key=AIzaSyDKom8LAWsj3_dtLzM5JmvIxbtXr9epP_c`
+      const mapUrl = `https://maps.googleapis.com/maps/api/staticmap?size=278x158&style=feature:poi|visibility:off&style=feature:road|visibility:simplified&style=feature:transit|visibility:off&style=feature:water|color:0x00a9ff&markers=color:green|${startMarker}&markers=color:black|${endMarker}&path=color:0xe20000FF|weight:3|${pathUrl}&key=AIzaSyDKom8LAWsj3_dtLzM5JmvIxbtXr9epP_c`
       const distance = google.maps.geometry.spherical.computeLength(decodedPath) / 1609.34;
       const estimatedTime = distance / 2.65 * 3600
       return <li className='course-index-cards' key={course.id}>

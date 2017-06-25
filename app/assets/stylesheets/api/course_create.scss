@@ -1,0 +1,22 @@
+.create-stats {
+  background-color: grey;
+  z-index: 1000;
+  display: flex;
+  width: 96vw;
+  margin: 0 5% 30px 5%;
+  padding: 6px 20px 6px 20px;
+  bottom: 0;
+  height: 38px;
+  background-color: #eceff1;
+  box-shadow: 1px 1px 1px #888888;
+}
+
+#course-create-container {
+  position: absolute;
+  z-index: -1;
+}
+
+#create-page-container {
+  box-sizing:border-box;
+  height: 100vh;
+}
