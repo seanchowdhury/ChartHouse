@@ -1,9 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { connect } from 'react-redux';
-import { withRouter } from 'react-router-dom';
+import { Link, withRouter } from 'react-router-dom';
 import { createCourse } from '../../actions/courses_actions';
-import CourseCreateHeader from './course_create_header';
 import Modal from '../modal/modal';
 import merge from 'lodash/merge';
 import { clearErrors } from '../../actions/error_actions';
@@ -219,7 +218,16 @@ class CourseCreate extends React.Component {
       center: this.state,
       zoom: 15,
       styles: mapStyle,
-      clickableIcons: false
+      mapTypeControl: true,
+            mapTypeControlOptions: {
+                style: google.maps.MapTypeControlStyle.HORIZONTAL_BAR,
+                position: google.maps.ControlPosition.LEFT_TOP
+            },
+            zoomControl: true,
+            zoomControlOptions: {
+                position: google.maps.ControlPosition.LEFT_TOP
+            },
+            streetViewControl: false,
     };
 
     navigator.geolocation.getCurrentPosition( (pos)=> {
@@ -250,14 +258,14 @@ class CourseCreate extends React.Component {
     }
     let renderTime;
     if (this.state.esttime === 0){
-      renderTime = '0';} else {
+      renderTime = '--:--';} else {
       renderTime = this.state.esttime.toString().toHHMMSS();
       }
     const descriptionText = "Enter a name and description for your route below. On the next page, you'll be able to see, edit, and share your route.";
     return (
       <div id='create-page-container'>
         <div>
-          <Modal isOpen={this.state.isModalOpen} onClose={() => this.closeModal()}>
+          <Modal className='save-modal' isOpen={this.state.isModalOpen} onClose={() => this.closeModal()}>
             <h1 className='saveTitle'>Save</h1>
             <p className='saveDescription'>{descriptionText}</p>
             <form>
@@ -272,26 +280,40 @@ class CourseCreate extends React.Component {
           </Modal>
         </div>
 
-
-
-        <CourseCreateHeader />
-        <div>
-          <ul>
-            <li><button onClick={this.undoMarker}>Undo</button></li>
-            <li><button onClick={this.clearAll}>Clear</button></li>
-            <li><button onClick={() => this.openModal()}>Save</button></li>
-        </ul>
+        <div className='cc-header'>
+          <ul className='cc-header-left'>
+            <li><Link to='/' className='dash-logo'>KUNKKA</Link></li>
+            <li className='builder-beta'>COURSE CONSTRUCTOR GAMMA <abbr className='the-word-beta'>BETA</abbr></li>
+          </ul>
+          <Link to='/courses' className='cc-header-right'>Exit Builder</Link>
         </div>
+
+        <div className='create-tools'>
+          <div className='create-search'>
+            <input placeholder="futureSearchBar"></input><button><i className="fa fa-search fa-fw fa-2x" aria-hidden="true"></i>
+              </button>
+          </div>
+          <button onClick={this.undoMarker} className='undo-buttons'><i className="fa fa-undo fa-fw fa-lg" aria-hidden="true"></i>
+            <br /><abbr>Undo</abbr></button>
+          <button onClick={this.clearAll} className='undo-buttons'><i className="fa fa-times fa-fw fa-lg" aria-hidden="true"></i>
+            <br /><abbr>Clear</abbr></button>
+          <button onClick={() => this.openModal()} className='save-button'>Save</button>
+        </div>
+
 
         <div>
           <ul className='create-stats'>
-            <li>
-              {this.state.distance} mi. <br />
-              Distance
+            <li className='create-stat-item'>
+              Row
+              <p className='create-stat-text'>Cruise Type</p>
             </li>
-            <li>
+            <li className='create-stat-item'>
+              {this.state.distance.toFixed(1)}<abbr className='create-unit'>mi.</abbr><br />
+            <p className='create-stat-text'>Distance</p>
+            </li>
+            <li className='create-stat-item'>
               {renderTime} <br />
-              Estimated Time
+            <p className='create-stat-text'>Estimated Time</p>
             </li>
           </ul>
         </div>

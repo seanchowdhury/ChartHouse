@@ -109,8 +109,10 @@ class Auth extends React.Component {
     return (
       <div className='auth-items'>
         <section className='auth-header'>
-          <div className='logo'>LOGO</div>
-          {this.headerLink()}
+          <ul className='auth-header-links'>
+            <li><div className='auth-logo'>KUNKKA</div></li>
+            <li>{this.headerLink()}</li>
+          </ul>
         </section>
         <section className="login-form">
           <form onSubmit={this.handleSubmit}>

@@ -88,20 +88,25 @@ input[type="password"]
   background-color: white;
   width: 100%;
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
 }
 
-.logo {
-  margin-left: 30%;
-  margin-top: 25px;
-  display:block;
-  height:50px;
-  width:50px;
+.auth-header-links {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 570px;
+}
+
+.auth-logo {
+  font-family: 'Montserrat', sans-serif;
+  color: #fc4c02;
+  font-weight: 900;
+  font-size: 18px;
+  text-decoration: none;
 }
 
 .header-link {
-  margin-right: 30%;
-  margin-top: 15px;
   width: 72px;
   height: 15px;
   text-align: center;
