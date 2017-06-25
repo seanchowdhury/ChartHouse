@@ -60,13 +60,18 @@ class CourseCreate extends React.Component {
   }
 
   addMarker(position) {
+    let strokeColor = '#000000';
+    if (this.pathMarkers.length < 1) {
+      strokeColor = '#01B60D';
+    }
     const marker = new google.maps.Marker({
       position,
       map: this.map,
       icon: {
         path: google.maps.SymbolPath.CIRCLE,
         scale: 5,
-        strokeColor: '#968899',
+        strokeColor,
+        fillColor: '#FFFFFF'
       },
       draggable: true
     });
@@ -120,7 +125,6 @@ class CourseCreate extends React.Component {
     });
     this.polyline = coursePoly;
     coursePoly.setMap(this.map);
-    debugger
     const distance = google.maps.geometry.spherical.computeLength(coursePoly.getPath().getArray()) / 1609.34;
 
 
@@ -217,6 +221,7 @@ class CourseCreate extends React.Component {
     const mapOptions = {
       center: this.state,
       zoom: 15,
+      clickableIcons: false,
       styles: mapStyle,
       mapTypeControl: true,
             mapTypeControlOptions: {
@@ -262,21 +267,37 @@ class CourseCreate extends React.Component {
       renderTime = this.state.esttime.toString().toHHMMSS();
       }
     const descriptionText = "Enter a name and description for your route below. On the next page, you'll be able to see, edit, and share your route.";
+    let saveButton;
+    if (this.pathMarkers.length < 2) {
+      saveButton = <button onClick={() => {}} className='faux-save-button'>Save</button>;
+    } else {
+      saveButton = <button onClick={() => this.openModal()} className='save-button'>Save</button>;
+    }
+    let titleInput;
+    if (this.props.errors.title) {
+      titleInput = <input onChange={this.update('title')} className='input-with-errors' value={this.state.course.title} />
+      } else {
+      titleInput = <input onChange={this.update('title')} value={this.state.course.title} />
+    }
+
     return (
       <div id='create-page-container'>
         <div>
           <Modal className='save-modal' isOpen={this.state.isModalOpen} onClose={() => this.closeModal()}>
-            <h1 className='saveTitle'>Save</h1>
-            <p className='saveDescription'>{descriptionText}</p>
-            <form>
-              <label>Course Name (required)<input onChange={this.update('title')} value={this.state.course.title} />   {this.props.errors.title}</label>
-
-              <label>Description<textarea onChange={this.update('description')} value={this.state.course.description} /></label>
-            </form>
-            <ul>
-              <li><button onClick={() => this.closeModal()}>Cancel</button></li>
-              <li><button onClick={() => this.saveMap()}>Save</button></li>
-            </ul>
+            <h1 className='save-title'>Save</h1>
+            <section className='save-body'>
+              <form className='save-form'>
+                <p className='save-description'>{descriptionText}</p><br />
+                <label>Course Name (required)<br />{titleInput}
+                <div className='modal-errors'>{this.props.errors.title}</div></label>
+                <br />
+                <label>Description <br /><textarea onChange={this.update('description')} value={this.state.course.description} /></label>
+              </form>
+              <ul className='save-modal-buttons'>
+                <li><button onClick={() => this.closeModal()} className='modal-cancel'>Cancel</button></li>
+                <li><button onClick={() => this.saveMap()} className='modal-save'>Save</button></li>
+              </ul>
+            </section>
           </Modal>
         </div>
 
@@ -297,7 +318,7 @@ class CourseCreate extends React.Component {
             <br /><abbr>Undo</abbr></button>
           <button onClick={this.clearAll} className='undo-buttons'><i className="fa fa-times fa-fw fa-lg" aria-hidden="true"></i>
             <br /><abbr>Clear</abbr></button>
-          <button onClick={() => this.openModal()} className='save-button'>Save</button>
+          {saveButton}
         </div>
 
 

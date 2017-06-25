@@ -8,10 +8,10 @@ class Modal extends React.Component {
     } else {
       let modalStyle = {
         position: 'absolute',
-        top: '50%',
-        left: '50%',
         transform: 'translate(-50%, -%50)',
         zIndex: '9999',
+        height: '310px',
+        width: '600px',
         background: '#fff'
       };
       let backdropStyle = {
@@ -21,11 +21,11 @@ class Modal extends React.Component {
         top: '0px',
         left: '0px',
         zIndex: '9998',
-        background: 'rgba(0, 0, 0, 0.3)'
+        background: 'rgba(0, 0, 0, 0.78)'
       };
       return (
-        <div className='saveModal'>
-          <div className='innerSaveModal' style={modalStyle}>
+        <div className='save-modal'>
+          <div className='inner-save-modal' style={modalStyle}>
             {this.props.children}
           </div>
           {!this.props.noBackdrop &&
