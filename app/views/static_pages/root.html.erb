@@ -3,6 +3,15 @@
   	window.currentUser = <%= render("api/users/user.json.jbuilder",
   		user: current_user).html_safe %>
   <% end %>
+
+  window.images = {
+     loginBackground: "<%= image_path('login_background.jpg') %>",
+     logo: "<%= image_path('logo.png') %>",
+     xMarks: "<%= image_path('x-marks.png') %>",
+     splashBackground: "<%= image_path('splash_background') %>",
+     swans: "<%= image_path('swan-boats.jpeg') %>"
+   }
+
 </script>
 
 <main id="root"></main>

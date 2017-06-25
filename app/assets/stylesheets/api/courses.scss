@@ -1,24 +1,11 @@
-// Place all the styles related to the api::courses controller here.
-// They will automatically be included in application.css.
-// You can use Sass (SCSS) here: http://sass-lang.com/
-
-#course-map-container {
-  height: 175px;
-  width: 278px;
-}
-
 #course-create-container {
   height: 100vh;
   width: 100%;
 }
 
-.map-cards {
-
-}
 
 #searchTextField {
   background-color: #fff;
-  font-family: Roboto;
   font-size: 15px;
   font-weight: 300;
   margin-left: 12px;
@@ -29,4 +16,127 @@
 
 #searchTextField:focus {
   border-color: #4d90fe;
+}
+
+
+.course-index-cards {;
+  margin: 19px 20px 19px 0px;
+}
+
+.course-index-details {
+  background-color: #f7f7f7;
+  height: 128px;
+  width: 238px;
+  padding: 15px 20px 0px 20px;
+}
+
+.page-container {
+  max-width: 1170px;
+  margin: 30px auto 80px auto;
+  padding: 0, 15px, 0, 15px
+}
+
+.map-cards {
+  width: 1200px;
+  display: flex;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+}
+
+.map-cards:after {
+  content: "";
+  flex: auto;
+}
+
+.index-link {
+  font-size: 18px;
+  color: #007FB6;
+  text-decoration: none;
+  background-color: #f7f7f7;
+}
+
+.index-header {
+  margin-bottom: 50px;
+  border-bottom: 1px solid lightgrey;
+  display: flex;
+  justify-content: space-between;
+}
+
+.index-link:hover {
+  text-decoration: underline;
+}
+
+.index-stats {
+  display: flex;
+  margin-top: 34px;
+}
+
+.index-num {
+  font-size: 25px;
+  margin-bottom: 6px;
+}
+
+.index-unit {
+  font-size: 17px;
+  border-bottom: 1px dashed black;
+  margin-left: 2px;
+}
+
+.index-label {
+  font-size: 13px;
+  color: #999;
+}
+
+.index-distance {
+  margin-right: 24px;
+}
+
+.index-link {
+  height: 0px;
+}
+
+.course-index-created {
+  padding: 5px 0px 5px 20px;
+  background-color: #f0f0f0;
+  color: #999;
+  font-size: 12px;
+}
+
+.index-title {
+  font-size: 30px;
+  margin-bottom: 32px;
+}
+
+.new-course-button {
+  font-size: 14px;
+  text-decoration: none;
+  color: white;
+  background-color: #fc4c02;
+  padding: 9px 10px 9px 10px;
+}
+
+.index-blurb {
+  margin-top: 20px;
+  font-size: 12px;
+  display: flex;
+  color: #333333;
+}
+
+.index-blurb-text {
+  margin-right: 33px;
+  line-height: 130%;
+}
+
+.never-lose {
+  font-weight: 600;
+  font-size: 15px;
+  margin-bottom: 8px;
+}
+
+
+.x-marks {
+  margin-right: 100px;
+  max-height: 97px;
+  width: auto;
+  margin-bottom: 25px;
 }

@@ -17,7 +17,9 @@ class CourseShow extends React.Component {
       return [lat, lng];
     })
     const pathUrl = waypoints.join('|');
-    const mapUrl = `https://maps.googleapis.com/maps/api/staticmap?size=600x300&path=color:red|${pathUrl}&key=AIzaSyDKom8LAWsj3_dtLzM5JmvIxbtXr9epP_c`
+    const startMarker = waypoints[0];
+    const endMarker = waypoints[waypoints.length-1];
+    const mapUrl = `https://maps.googleapis.com/maps/api/staticmap?size=825x350&style=feature:poi|visibility:off&style=feature:road|visibility:off&style=feature:transit|visibility:off&style=feature:water|color:0x00a9ff&markers=color:green|${startMarker}&markers=color:black|${endMarker}&path=color:0xe20000FF|weight:3|${pathUrl}&key=AIzaSyDKom8LAWsj3_dtLzM5JmvIxbtXr9epP_c`
     return (
       <div>
         <h1>Title: {this.props.course.title}</h1>

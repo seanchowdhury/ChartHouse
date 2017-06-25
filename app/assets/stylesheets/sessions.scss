@@ -1,4 +1,3 @@
-
 .auth-button {
   color: white;
   background-color: #FC4C02;
@@ -15,12 +14,11 @@
 }
 
 .login-form {
-  font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
   font-weight: 100;
   background-color: rgba(0,0,0,.7);
   color: white;
   width: 400px;
-  height: 560px;
+  min-height: 514px;
   display: flex;
   flex-direction: column;
   margin: 60px;
@@ -80,12 +78,13 @@ input[type="password"]
   flex-direction: column;
   align-items: center;
   height: 100vh;
-  background-image: url("login_background.jpg");
+  background-image: image_url('swan-boats.jpeg');
   background-size: cover;
 }
 
 .auth-header {
-  height: 60px;
+  min-height: 55px;
+  max-height: 55px;
   background-color: white;
   width: 100%;
   display: flex;
@@ -95,8 +94,6 @@ input[type="password"]
 .logo {
   margin-left: 30%;
   margin-top: 25px;
-
-  background:url("logo.png");
   display:block;
   height:50px;
   width:50px;
@@ -104,7 +101,7 @@ input[type="password"]
 
 .header-link {
   margin-right: 30%;
-  margin-top: 13px;
+  margin-top: 15px;
   width: 72px;
   height: 15px;
   text-align: center;
@@ -136,6 +133,7 @@ input[type="password"]
 }
 
 .splash-page {
+  background-image: image_url('splash_background.jpg');
   height: 100vh;
   background-size: cover;
 }

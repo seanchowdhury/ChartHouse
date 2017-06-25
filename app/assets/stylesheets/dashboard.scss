@@ -22,8 +22,16 @@
   margin-left: 10%;
 }
 
+.dash-logo {
+  font-family: 'Raleway', sans-serif;
+  color: #fc4c02;
+  font-weight: 800;
+  font-size: 18px;
+  text-decoration: none;
+}
+
 .navbar-link:hover {
-  color: orange;
+  color: #fc4c02;
   border-left: 1px solid grey;
   border-right: 1px solid grey;
   outline: 1px solid white;

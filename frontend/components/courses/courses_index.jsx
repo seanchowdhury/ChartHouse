@@ -16,6 +16,16 @@ class CoursesIndex extends React.Component {
     this.props.requestCourses();
   }
 
+  timeConverter(UNIX_timestamp){
+    const a = new Date(UNIX_timestamp);
+    const months = ['January','Febuary','March','April','May','June','July','August','September','October','November','December'];
+    const year = a.getFullYear();
+    const month = months[a.getMonth()];
+    const date = a.getDate();
+    const time = month + ' ' + date + ', ' + year;
+    return time;
+  }
+
   render() {
     const courseList = values(this.props.courses).map((course) => {
       const decodedPath = google.maps.geometry.encoding.decodePath(course.waypoints)
@@ -25,17 +35,50 @@ class CoursesIndex extends React.Component {
         return [lat, lng];
       })
       const pathUrl = waypoints.join('|');
-      const mapUrl = `https://maps.googleapis.com/maps/api/staticmap?size=300x150&path=color:red|${pathUrl}&key=AIzaSyDKom8LAWsj3_dtLzM5JmvIxbtXr9epP_c`
-      return <li key={course.id}>
-        <Link to={`/courses/${course.id}`}>{course.title} <img src={mapUrl} /></Link>
-
+      const startMarker = waypoints[0];
+      const endMarker = waypoints[waypoints.length-1];
+      const mapUrl = `https://maps.googleapis.com/maps/api/staticmap?size=278x158&style=feature:poi|visibility:off&style=feature:road|visibility:off&style=feature:transit|visibility:off&style=feature:water|color:0x00a9ff&markers=color:green|${startMarker}&markers=color:black|${endMarker}&path=color:0xe20000FF|weight:3|${pathUrl}&key=AIzaSyDKom8LAWsj3_dtLzM5JmvIxbtXr9epP_c`
+      const distance = google.maps.geometry.spherical.computeLength(decodedPath) / 1609.34;
+      const estimatedTime = distance / 2.65 * 3600
+      return <li className='course-index-cards' key={course.id}>
+        <Link className='index-link' to={`/courses/${course.id}`}>
+          <img className='course-index-map' src={mapUrl} />
+        </Link>
+          <div className='course-index-details'>
+            <Link className='index-link' to={`/courses/${course.id}`}>{course.title}</Link>
+            <ul className='index-stats'>
+              <li className='index-distance'>
+                <div className='index-num'>{distance.toFixed(1)}<abbr className='index-unit'>mi</abbr><br /></div>
+                <div className='index-label'>Distance</div>
+              </li>
+              <li>
+                <div className='index-num'>{estimatedTime.toString().toHHMMSS()}<br /></div>
+                <div className='index-label'>Est. Time</div>
+              </li>
+            </ul>
+          </div>
+          <div className='course-index-created'>
+            Created on {this.timeConverter(course.created_at)}
+          </div>
       </li>;
     });
     return (
       <div>
         <DashboardNav />
-        <div>
-          <h3><Link to='/newcourse'>MAURICE THE VAST MAJORITY OF MY WORK IS BEHIND THIS CREATE COURSE LINK</Link></h3>
+        <div className='page-container'>
+          <div className='index-header'>
+            <div>
+              <h1 className='index-title'>My Courses</h1>
+              <Link className='new-course-button' to='/newcourse'>Create New Course</Link>
+            </div>
+            <section className='index-blurb'>
+              <div className='index-blurb-text'>
+                <p className='never-lose'>Never Miss Another Torrent<br /></p>
+                <p>Consider skilling X Marks the Spot before getting another level <br />of TideBringer.</p>
+              </div>
+              <img className='x-marks' src={window.images.xMarks} />
+            </section>
+          </div>
           <ul className='map-cards'>{courseList}</ul>
         </div>
       </div>

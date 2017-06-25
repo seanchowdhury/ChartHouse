@@ -29,7 +29,7 @@ class DashboardNav extends React.Component {
     return (
       <div className='navbar'>
          <ul className='navbar-left'>
-          <li className='navbar-link'><Link to="/dashboard"><h1>AHOY</h1></Link></li>
+          <li className='navbar-link'><Link to="/dashboard"><h1 className='dash-logo'>KUNKKA</h1></Link></li>
           <li className='navbar-link' onMouseOver={this.showDash} onMouseLeave={this.hideDash}>Dashboard
             <ul id='dash-dropdown' className='dropdown'>
               <li className='dropdown-link'><Link to='/courses'>Courses</Link></li>
