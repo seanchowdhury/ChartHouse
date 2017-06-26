@@ -1,16 +1,141 @@
 .show-page-container {
-
-}
-
-.show-body {
-  display: flex;
-  justify-content: space-between;
   width: 1200px;
   height: 540px;
   margin: 0 auto;
 }
 
-#show-map {
+.show-header {
+  margin-left: 20px;
+  margin-top: 30px;
+  font-size: 12px;
+  font-weight: 700;
+  color: rgb(102, 102, 102)
+}
+
+.show-body {
+  display: flex;
+  justify-content: space-between;
+  margin: 0 auto;
+}
+
+#course-show-container {
   width: 820px;
   height: 360px;
+  position: relative;
+}
+
+.show-header h1 {
+  font-size: 30px;
+  margin-left: 21px;
+  margin-top: 30px;
+  font-weight: 400;
+  color: black;
+}
+
+.show-header a {
+  color: rgb(102, 102, 102);
+  font-weight: lighter;
+}
+
+.show-header a:hover {
+  text-decoration: underline;
+}
+
+.show-header ul {
+  display: flex;
+}
+
+
+.show-header button {
+  background-color: white;
+  color: black;
+  font-size: 14px;
+  padding: 9px 10px;
+  border: 1px solid rgb(204, 204, 204);
+  margin: 40px 5px 10px 0;
+}
+
+.show-header button:hover {
+  background-color: #F5F5F5;
+}
+
+.profile-pic {
+  border-radius: 50%;
+  height: 70px;
+  width: 70px;
+  margin-right: 5px;
+}
+
+.show-stats {
+  display: flex;
+  flex-direction: column;
+  width: 270px;
+  height: 305.6px;
+  font-size: 20px;
+}
+
+.show-stats-header {
+  display: block;
+  padding-bottom: 25px;
+  border-bottom: 1px solid rgb(128, 128, 128);
+  color: rgb(153, 153, 153);
+  font-size: 12px;
+}
+
+.author {
+  font-size: 20px;
+  font-weight: 400;
+  color: black;
+  line-height: 130%;
+}
+
+.show-stats-stats {
+  margin-top: 30px;
+  padding-bottom: 30px;
+  border-bottom: 1px solid rgb(128, 128, 128);
+}
+
+.show-stats-stats ul {
+  display: flex;
+}
+
+.show-stats-stats li {
+  margin-right: 22px;
+}
+
+.show-stats-label {
+  color: rgb(153, 153, 153);
+  font-size: 12px;
+}
+
+.show-stats-description {
+  color: rgb(51, 51, 51);
+  font-size: 12px;
+  padding: 22px 0;
+  border-bottom: 1px solid rgb(128, 128, 128);
+}
+
+.show-stats-social {
+  color: rgb(51, 51, 51);
+  font-size: 18px;
+  font-weight: 400;
+  margin-top: 30px;
+}
+
+.show-stats-social ul {
+  display: flex;
+}
+
+.show-stats-social button {
+  background-color: white;
+  color: black;
+  font-size: 14px;
+  padding: 9px 10px;
+  border: 1px solid rgb(204, 204, 204);
+  margin-top: 25px;
+  margin-right: 5px;
+}
+
+.show-stats-social button:hover {
+  background-color: #F5F5F5;
 }

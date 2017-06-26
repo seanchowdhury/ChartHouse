@@ -1,3 +1,17 @@
+# == Schema Information
+#
+# Table name: users
+#
+#  id              :integer          not null, primary key
+#  email           :string           not null
+#  fname           :string           not null
+#  lname           :string           not null
+#  password_digest :string           not null
+#  session_token   :string           not null
+#  created_at      :datetime         not null
+#  updated_at      :datetime         not null
+#
+
 class User < ActiveRecord::Base
   validates_presence_of :password_digest, :session_token
   validates :email, presence: { message: "Provide a valid email"}
@@ -11,7 +25,7 @@ class User < ActiveRecord::Base
   before_validation :ensure_session_token_uniqueness
 
   has_many :courses
-
+  has_many :charts
   def password=(password)
     @password = password
 		self.password_digest = BCrypt::Password.create(password)

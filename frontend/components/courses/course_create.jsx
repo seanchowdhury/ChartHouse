@@ -115,7 +115,6 @@ class CourseCreate extends React.Component {
       path.push({ lat: pathMarkers[i].position.lat(), lng: pathMarkers[i].position.lng() });
     }
 
-
     const coursePoly = new google.maps.Polyline({
       path,
       geodesic: true,
@@ -126,7 +125,6 @@ class CourseCreate extends React.Component {
     this.polyline = coursePoly;
     coursePoly.setMap(this.map);
     const distance = google.maps.geometry.spherical.computeLength(coursePoly.getPath().getArray()) / 1609.34;
-
 
     const encryptedWaypoints = google.maps.geometry.encoding.encodePath(this.polyline.getPath());
     this.setState({

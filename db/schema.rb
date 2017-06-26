@@ -11,10 +11,26 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170621160908) do
+ActiveRecord::Schema.define(version: 20170626202822) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "charts", force: :cascade do |t|
+    t.integer  "user_id",     null: false
+    t.integer  "course_id",   null: false
+    t.integer  "boat_id",     null: false
+    t.string   "title",       null: false
+    t.text     "description"
+    t.date     "start_time",  null: false
+    t.text     "chart_stats", null: false
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+  end
+
+  add_index "charts", ["boat_id"], name: "index_charts_on_boat_id", using: :btree
+  add_index "charts", ["start_time"], name: "index_charts_on_start_time", using: :btree
+  add_index "charts", ["user_id"], name: "index_charts_on_user_id", using: :btree
 
   create_table "courses", force: :cascade do |t|
     t.integer  "user_id",     null: false
