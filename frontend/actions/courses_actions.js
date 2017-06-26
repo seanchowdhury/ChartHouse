@@ -29,3 +29,10 @@ export const requestCourses = () => dispatch => {
       dispatch(receiveCourses(courses))
     ));
 };
+
+export const requestCourse = () => dispatch => {
+  return ApiUtil.requestCourse()
+    .then(course => (
+      dispatch(receiveCourse(course))
+    ));
+};

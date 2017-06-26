@@ -5,6 +5,7 @@ import values from 'lodash/values';
 import DashboardNav from '../dashboard/dashboard_header';
 import { requestCourses } from '../../actions/courses_actions';
 import Map from '../map/map';
+import { timeConverter } from '../../util/misc_util';
 
 class CoursesIndex extends React.Component {
   constructor(props) {
@@ -14,16 +15,6 @@ class CoursesIndex extends React.Component {
 
   deleteCourse() {
     this.props.requestCourses();
-  }
-
-  timeConverter(UNIX_timestamp){
-    const a = new Date(UNIX_timestamp);
-    const months = ['January','Febuary','March','April','May','June','July','August','September','October','November','December'];
-    const year = a.getFullYear();
-    const month = months[a.getMonth()];
-    const date = a.getDate();
-    const time = month + ' ' + date + ', ' + year;
-    return time;
   }
 
   render() {
@@ -58,7 +49,7 @@ class CoursesIndex extends React.Component {
             </ul>
           </div>
           <div className='course-index-created'>
-            Created on {this.timeConverter(course.created_at)}
+            Created on {timeConverter(course.created_at)}
           </div>
       </li>;
     });
