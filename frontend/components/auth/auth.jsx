@@ -56,7 +56,7 @@ class Auth extends React.Component {
       password: 'password'
     }
 
-    this.props.processForm({user});
+    this.props.login({user});
   }
 
   renderFields() {

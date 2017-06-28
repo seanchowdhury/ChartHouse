@@ -34,7 +34,6 @@ class ChartCreate extends React.Component {
   saveChart() {
     const start_time = new Date(`${this.state.date} ${this.state.time}`);
     const course = this.props.courses[this.state.course_id]
-    debugger
     const decodedPath = google.maps.geometry.encoding.decodePath(course.waypoints)
     const lat = decodedPath[0].lat()
     const lng = decodedPath[0].lng()
@@ -42,7 +41,7 @@ class ChartCreate extends React.Component {
     const chart = merge({}, this.state, {boat_id: 1, start_time})
     this.props.createChart(chart)
       .then( ({chart}) => {
-        debugger
+  
         this.props.history.push(`/charts/${Object.keys(chart)[0]}`)
         }
       );

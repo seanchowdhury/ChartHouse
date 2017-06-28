@@ -20,12 +20,24 @@ class CourseCreate extends React.Component {
     this.renderPolyline = this.renderPolyline.bind(this);
     this.addMarker = this.addMarker.bind(this);
     this.undoMarker = this.undoMarker.bind(this);
+    let today = new Date();
+    let dd = today.getDate();
+    let mm = today.getMonth()+1;
+    let yyyy = today.getFullYear();
+     if(dd<10){
+            dd='0'+dd
+        }
+        if(mm<10){
+            mm='0'+mm
+        }
+
+    this.today = yyyy+'-'+mm+'-'+dd;
     this.state = {
       lat: 40.728420,
       lng: -74.013389,
       isModalOpen: false,
       time: '08:00',
-      date: "",
+      date: this.today,
       course: {
         distance: 0,
         esttime: 0,
@@ -135,9 +147,7 @@ class CourseCreate extends React.Component {
     coursePoly.setMap(this.map);
     const distance = google.maps.geometry.spherical.computeLength(coursePoly.getPath().getArray()) / 1609.34;
     const esttime = (distance / 2.65 * 3600);
-    debugger
     const encryptedWaypoints = google.maps.geometry.encoding.encodePath(this.polyline.getPath());
-    debugger
     this.setState({
       course: merge({}, this.state.course, {distance, esttime, waypoints: encryptedWaypoints})
     });
@@ -303,22 +313,10 @@ class CourseCreate extends React.Component {
             )
           }
         }
-        let today = new Date();
-        let dd = today.getDate();
-        let mm = today.getMonth()+1;
-        let yyyy = today.getFullYear();
-         if(dd<10){
-                dd='0'+dd
-            }
-            if(mm<10){
-                mm='0'+mm
-            }
-
-        today = yyyy+'-'+mm+'-'+dd;
 
     return (
       <div>
-        <input value={this.state.date} min={today} type="date" onChange={this.updateDateTime('date')} className='create-course-time' />
+        <input value={this.state.date} min={this.today} type="date" onChange={this.updateDateTime('date')} className='create-course-time' />
         <select value={this.state.time} onChange={this.updateDateTime('time')} className='create-course-time'>
           {timeSelect}
         </select>
