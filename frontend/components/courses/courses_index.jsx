@@ -76,7 +76,6 @@ class CoursesIndex extends React.Component {
 }
 
 const mapStateToProps = ({courses}) => {
-  debugger
   return {
   courses
 };

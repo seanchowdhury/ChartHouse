@@ -66,7 +66,6 @@ class CourseCreate extends React.Component {
   saveMap() {
     const saveDate = new Date(`${this.state.date} ${this.state.time}`)
     const course = merge({}, this.state.course, {start_time: saveDate} )
-    
     this.props.createCourse(course)
       .then( ({course}) => {
         this.props.history.push(`/courses/${Object.keys(course)[0]}`)
@@ -76,47 +75,19 @@ class CourseCreate extends React.Component {
 
   checkTerrain(position) {
 
-
-    const resolve = (arg) => {
-      
-      const img = arg;
-      img.id = 'terrain'
-      img.crossOrigin = "";
-      $('.create-tools').append(img);
-      const renderedImg = document.getElementById('terrain');
-      renderedImg.crossOrigin = '';
-      
-      const canvas = document.createElement('canvas');
-      
-      canvas.width = renderedImg.width;
-      canvas.height = renderedImg.height;
-      
-      canvas.getContext('2d').drawImage(renderedImg, 0, 0, renderedImg.width, renderedImg.height);
-      
-      const HELLYEA = canvas.getContext('2d').getImageData(0, 0).data;
-      
-      return HELLYEA;
-    }
-      const center = `${position.lat()},${position.lng()}`
-      
-      image({
-        type: 'staticmap',
-        center,
-        zoom: '20',
-        size: '1x1',
-      }).then(arg => resolve(arg));
-
+    const geocoder = new google.maps.Geocoder;
+    geocoder.geocode({'location': position}, function(results, status) {
+      if (status === 'OK') {
+      }
+    });
   }
-  // `http://maps.googleapis.com/maps/api/staticmap?center=${position.lat()},${position.lng()}&zoom=20&size=20x20&maptype=roadmap&sensor=false&key=AIzaSyBiE2efHKeAptVfVRtj9-ZDeHWPKgNjdNk`
-  // img.id = 'terrain';
-  // $('.create-tools').append(img);
-  // const renderedImg = document.getElementById('terrain');
+
   addMarker(position) {
     let strokeColor = '#000000';
     if (this.pathMarkers.length < 1) {
       strokeColor = '#01B60D';
     }
-    this.checkTerrain(position);
+    // this.checkTerrain(position);
     const marker = new google.maps.Marker({
       position,
       map: this.map,
