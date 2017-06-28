@@ -11,6 +11,7 @@ class Api::CoursesController < ApplicationController
 
   def create
     @course = Course.new(course_params)
+    @course.user_id = current_user.id
     if @course.save
       render "api/courses/show"
     else
@@ -24,6 +25,6 @@ class Api::CoursesController < ApplicationController
   private
 
   def course_params
-    params.require(:course).permit(:user_id, :title, :description, :waypoints)
+    params.require(:course).permit(:title, :description, :waypoints, :distance, :esttime, :start_time)
   end
 end

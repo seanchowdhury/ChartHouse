@@ -1,0 +1,156 @@
+#chart-form-container {
+  display: flex;
+  padding-top: 30px;
+  width: 1140px;
+  margin: 0 auto;
+}
+
+.chart-create-entry-options {
+  font-size: 16px;
+  width: 152px;
+  display: flex;
+  flex-direction: column;
+}
+
+.chart-create-entry-options a {
+  padding: 14px 20px;
+  border: 1px solid rgb(204, 204, 204);
+  color: rgb(51, 51, 51);
+}
+
+.chart-create-entry-options a:hover {
+  background-color: rgb(245, 245, 245);
+}
+
+#selected-entry-option {
+  border-left: 4px solid #fc4c02;
+}
+
+#chart-form {
+  margin-top: 22px;
+  margin-left: 25px;
+  width: 968px;
+  color: rgb(102, 102, 102);
+  line-height: 200%;
+}
+
+#chart-form select {
+  background-color: white;
+  border: 1px solid rgb(204, 204, 204);
+  height: 32px;
+}
+
+#chart-form select:hover {
+  background-color: rgb(245, 245, 245);
+}
+
+#chart-form h1 {
+  color: rgb(51, 51, 51);
+  font-size: 24px;
+}
+
+#chart-form label {
+  color: rgb(51, 51, 51);
+  font-size: 12px;
+  margin-right: 33px;
+}
+
+#create-stats-input {
+  display: flex;
+  justify-content: flex-start;
+  padding-bottom: 50px;
+  margin-top: 40px;
+  border-bottom: 1px solid rgb(204, 204, 204);
+}
+
+.chart-duration {
+  display: flex;
+  border: 1px solid rgb(204, 204, 204);
+}
+
+.chart-duration input {
+  width: 33px;
+  height: 30px;
+  padding: 1px 10px 1px 23px;
+  border-left: 1px solid rgb(204, 204, 204);
+}
+
+.chart-duration-inputs {
+  min-width: 70px;
+  height: 33px;
+}
+
+.chart-duration-inputs abbr {
+  padding-right: 10px;
+  color: rgb(204, 204, 204);
+}
+
+#create-logistics-input {
+  margin-top: 20px;
+  border-bottom: 1px solid rgb(204, 204, 204);
+  display: flex;
+  flex-direction: column;
+}
+
+#create-logistics-input select {
+  height: 32px;
+  border: 1px solid rgb(204, 204, 204);
+  padding: 1px 20px;
+  margin-bottom: 50px;
+}
+
+#chart-title-input {
+  height: 32px;
+  border: 1px solid rgb(204, 204, 204);
+  padding: 1px 20px;
+  margin-bottom: 50px;
+}
+
+#create-details-input {
+  margin-top: 30px;
+  display: flex;
+  flex-direction: column;
+  border-bottom: 1px solid rgb(204, 204, 204);
+  padding-bottom: 40px;
+}
+
+.create-chart-description {
+  margin-top: 65px;
+}
+
+.create-chart-description textarea {
+  width: 447px;
+  height: 107px;
+  padding: 10px;
+  border: 1px solid rgb(204, 204, 204);
+  resize: none;
+}
+
+.save-chart-buttons {
+  margin-top: 40px;
+  display: flex;
+  justify-content: flex-start;
+}
+
+.save-chart-buttons button {
+  font-size: 14px;
+  margin-left: auto;
+  margin-right: 20px;
+  color: white;
+  background-color: #fc4c02;
+  height: 40px;
+  width: 64.5px;
+}
+
+.save-chart-buttons button:hover {
+  background-color: #E34402;
+}
+
+.save-chart-buttons a {
+  color: rgb(0, 127, 182);
+  font-size: 12px;
+}
+
+.save-chart-buttons a:hover {
+  text-decoration: underline;
+}

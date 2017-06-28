@@ -14,6 +14,7 @@ import DashboardNav from './dashboard/dashboard_header';
 import CoursesIndex from './courses/courses_index';
 import CourseCreate from './courses/course_create';
 import CourseShow from './courses/course_show';
+import ChartCreate from './charts/chart_create';
 import { AuthRoute, ProtectedRoute } from '../util/route_util';
 
 
@@ -29,6 +30,7 @@ const App = () => (
       <ProtectedRoute exact path="/courses" component={CoursesIndex} />
       <ProtectedRoute exact path="/courses/:courseId" component={CourseShow} />
       <ProtectedRoute path="/newcourse" component={CourseCreate} />
+      <ProtectedRoute path="/newchart" component={ChartCreate} />      
     </Switch>
   </div>
 );

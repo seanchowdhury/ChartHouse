@@ -29,8 +29,6 @@ class CoursesIndex extends React.Component {
       const startMarker = waypoints[0];
       const endMarker = waypoints[waypoints.length-1];
       const mapUrl = `https://maps.googleapis.com/maps/api/staticmap?size=278x158&style=feature:poi|visibility:off&style=feature:road|visibility:simplified&style=feature:transit|visibility:off&style=feature:water|color:0x00a9ff&markers=color:green|${startMarker}&markers=color:black|${endMarker}&path=color:0xe20000FF|weight:3|${pathUrl}&key=AIzaSyDKom8LAWsj3_dtLzM5JmvIxbtXr9epP_c`
-      const distance = google.maps.geometry.spherical.computeLength(decodedPath) / 1609.34;
-      const estimatedTime = distance / 2.65 * 3600
       return <li className='course-index-cards' key={course.id}>
         <Link className='index-link' to={`/courses/${course.id}`}>
           <img className='course-index-map' src={mapUrl} />
@@ -39,11 +37,11 @@ class CoursesIndex extends React.Component {
             <Link className='index-link' to={`/courses/${course.id}`}>{course.title}</Link>
             <ul className='index-stats'>
               <li className='index-distance'>
-                <div className='index-num'>{distance.toFixed(1)}<abbr className='index-unit'>mi</abbr><br /></div>
+                <div className='index-num'>{course.distance.toFixed(1)}<abbr className='index-unit'>mi</abbr><br /></div>
                 <div className='index-label'>Distance</div>
               </li>
               <li>
-                <div className='index-num'>{estimatedTime.toString().toHHMMSS()}<br /></div>
+                <div className='index-num'>{course.esttime.toString().toHHMMSS()}<br /></div>
                 <div className='index-label'>Est. Time</div>
               </li>
             </ul>
@@ -78,6 +76,7 @@ class CoursesIndex extends React.Component {
 }
 
 const mapStateToProps = ({courses}) => {
+  debugger
   return {
   courses
 };

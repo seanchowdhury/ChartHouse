@@ -11,6 +11,7 @@ class Api::ChartsController < ApplicationController
 
   def create
     @chart = Chart.new(chart_params)
+    @chart.user_id = current_user.id
     if @chart.save
       render "api/charts/show"
     else
@@ -24,6 +25,6 @@ class Api::ChartsController < ApplicationController
   private
 
   def chart_params
-    params.require(:chart).permit(:user_id, :course_id, :boat_id, :title, :description, :start_time, :chart_stats)
+    params.require(:chart).permit(:course_id, :boat_id, :title, :description, :start_time, :chart_stats)
   end
 end

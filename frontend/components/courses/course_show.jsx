@@ -10,11 +10,8 @@ import DashboardNav from '../dashboard/dashboard_header';
 class CourseShow extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {
-      distance: 0,
-      esttime: 0
-    }
   }
+
 
   componentDidMount() {
     const mapStyle = ([
@@ -108,6 +105,7 @@ class CourseShow extends React.Component {
     return {lat, lng};
   });
 
+
   const mapOptions = {
     center: {lat: 40.728420,
           lng: -74.013389
@@ -160,13 +158,6 @@ class CourseShow extends React.Component {
     });
 
     this.map.fitBounds(bounds);
-    const distance = google.maps.geometry.spherical.computeLength(decodedPath) / 1609.34;
-
-    this.setState({
-      distance,
-      esttime: distance / 2.65 * 3600
-    })
-
   }
 
   render() {
@@ -184,7 +175,8 @@ class CourseShow extends React.Component {
             <p><Link to='/courses/'>My Courses</Link> / {this.props.course.title}</p>
             <h1>{this.props.course.title}</h1>
             <ul>
-              <li><button>Print?</button></li>
+              <li><button>Print</button></li>
+              <li><button>Wait</button></li>
               <li><button>Like</button></li>
               <li><button>With</button></li>
               <li><button>Paper?</button></li>
@@ -204,19 +196,20 @@ class CourseShow extends React.Component {
               </div>
               <div className='show-stats-stats'>
                 <ul>
-                  <li>{this.state.distance.toFixed(1)}<abbr className='create-unit'>mi</abbr><br /><abbr className='show-stats-label'>Distance</abbr></li>
-                  <li>{this.state.esttime.toString().toHHMMSS()}<br /><abbr className='show-stats-label'>Estimated Time</abbr></li>
+                  <li>{this.props.course.distance.toFixed(1)}<abbr className='create-unit'>mi</abbr><br /><abbr className='show-stats-label'>Distance</abbr></li>
+                  <li>{this.props.course.esttime.toString().toHHMMSS()}<br /><abbr className='show-stats-label'>Estimated Time</abbr></li>
                   <li>Water<br /><abbr className='show-stats-label'>Road Type</abbr></li>
                 </ul>
               </div>
               <div className={bottomBorder}>{this.props.course.description}</div>
               <div className='show-stats-social'>Share this Course with Friends
                 <ul>
-                  <li><button>Call?</button></li>
-                  <li><button>Like</button></li>
-                  <li><button>With</button></li>
-                  <li><button>A</button></li>
-                  <li><button>Phone?</button></li>
+                  <li><button>Friends?</button></li>
+                  <li><button>Did</button></li>
+                  <li><button>I</button></li>
+                  <li><button>Not</button></li>
+                  <li><button>Import</button></li>
+                  <li><button>That?</button></li>
                 </ul>
               </div>
             </div>

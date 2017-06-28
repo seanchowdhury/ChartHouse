@@ -6,6 +6,7 @@ import { createCourse } from '../../actions/courses_actions';
 import Modal from '../modal/modal';
 import merge from 'lodash/merge';
 import { clearErrors } from '../../actions/error_actions';
+const image = require('google-maps-image-api');
 
 class CourseCreate extends React.Component {
 
@@ -20,16 +21,19 @@ class CourseCreate extends React.Component {
     this.addMarker = this.addMarker.bind(this);
     this.undoMarker = this.undoMarker.bind(this);
     this.state = {
+      coursePath: [],
       lat: 40.728420,
       lng: -74.013389,
-      distance: 0,
-      esttime: 0,
       isModalOpen: false,
+      time: '08:00',
+      date: "",
       course: {
-        user_id: this.props.user_id,
+        distance: 0,
+        esttime: 0,
         title: "",
         description: "",
-        waypoints: ""
+        waypoints: "",
+        start_time: ""
       }
     };
   }
@@ -45,6 +49,14 @@ class CourseCreate extends React.Component {
     }
   }
 
+  updateDateTime(field) {
+    return (e) => {
+      this.setState({
+        [field]: e.currentTarget.value
+      });
+    }
+  }
+
   handleSubmit(e) {
     e.preventDefault();
     const course = this.course;
@@ -52,18 +64,59 @@ class CourseCreate extends React.Component {
   }
 
   saveMap() {
-    this.props.createCourse(this.state.course)
+    const saveDate = new Date(`${this.state.date} ${this.state.time}`)
+    const course = merge({}, this.state.course, {start_time: saveDate} )
+    
+    this.props.createCourse(course)
       .then( ({course}) => {
         this.props.history.push(`/courses/${Object.keys(course)[0]}`)
       }
     )
   }
 
+  checkTerrain(position) {
+
+
+    const resolve = (arg) => {
+      
+      const img = arg;
+      img.id = 'terrain'
+      img.crossOrigin = "";
+      $('.create-tools').append(img);
+      const renderedImg = document.getElementById('terrain');
+      renderedImg.crossOrigin = '';
+      
+      const canvas = document.createElement('canvas');
+      
+      canvas.width = renderedImg.width;
+      canvas.height = renderedImg.height;
+      
+      canvas.getContext('2d').drawImage(renderedImg, 0, 0, renderedImg.width, renderedImg.height);
+      
+      const HELLYEA = canvas.getContext('2d').getImageData(0, 0).data;
+      
+      return HELLYEA;
+    }
+      const center = `${position.lat()},${position.lng()}`
+      
+      image({
+        type: 'staticmap',
+        center,
+        zoom: '20',
+        size: '1x1',
+      }).then(arg => resolve(arg));
+
+  }
+  // `http://maps.googleapis.com/maps/api/staticmap?center=${position.lat()},${position.lng()}&zoom=20&size=20x20&maptype=roadmap&sensor=false&key=AIzaSyBiE2efHKeAptVfVRtj9-ZDeHWPKgNjdNk`
+  // img.id = 'terrain';
+  // $('.create-tools').append(img);
+  // const renderedImg = document.getElementById('terrain');
   addMarker(position) {
     let strokeColor = '#000000';
     if (this.pathMarkers.length < 1) {
       strokeColor = '#01B60D';
     }
+    this.checkTerrain(position);
     const marker = new google.maps.Marker({
       position,
       map: this.map,
@@ -102,7 +155,7 @@ class CourseCreate extends React.Component {
       this.pathMarkers.forEach((marker) => marker.setMap(null));
       this.pathMarkers = [];
       this.polyline.setMap(null);
-      this.setState( {distance: 0, esttime: 0} );
+      this.setState( merge({}, this.state.course, {distance: 0, esttime: 0} ));
     }
   }
 
@@ -128,9 +181,7 @@ class CourseCreate extends React.Component {
 
     const encryptedWaypoints = google.maps.geometry.encoding.encodePath(this.polyline.getPath());
     this.setState({
-      distance,
-      esttime: distance / 2.65 * 3600,
-      course: merge({}, this.state.course, {waypoints: encryptedWaypoints})
+      course: merge({}, this.state.course, {distance, esttime: distance /2.65 * 3600, waypoints: encryptedWaypoints})
     });
   }
 
@@ -254,15 +305,70 @@ class CourseCreate extends React.Component {
     this.setState({ isModalOpen: false });
   }
 
+  renderDateTime() {
+    const timeSelect = [];
+    for(let i = 0; i < 24; i++){
+      for(let n = 0; n < 2; n++ ) {
+        let hr;
+        let min;
+        let AMPM;
+        if (i === 0) {
+          hr = 12;
+        } else if ( i > 12) {
+          hr = i - 12;
+        } else {
+          hr = i
+        }
+        if (n === 0) {
+          min = '00';
+        } else {
+          min = '30';
+        }
+        if (i > 11) {
+          AMPM = 'PM';
+        } else {
+          AMPM = 'AM';
+        }
+        let vali = i;
+        if (i < 10) {
+          vali = `0${i}`
+        }
+        timeSelect.push(
+          <option key={`${i}:${n*30}`} value={`${vali}:${min}`}>{hr}:{min} {AMPM}</option>
+            )
+          }
+        }
+        let today = new Date();
+        let dd = today.getDate();
+        let mm = today.getMonth()+1;
+        let yyyy = today.getFullYear();
+         if(dd<10){
+                dd='0'+dd
+            }
+            if(mm<10){
+                mm='0'+mm
+            }
+
+        today = yyyy+'-'+mm+'-'+dd;
+
+    return (
+      <div>
+        <input value={this.state.date} min={today} type="date" onChange={this.updateDateTime('date')}/>
+        <select value={this.state.time} onChange={this.updateDateTime('time')}>
+          {timeSelect}
+        </select>
+      </div>
+    )
+  }
 
   render() {
     if (this.state.course.title.length > 0 && this.props.errors.title) {
       this.props.clearErrors();
     }
     let renderTime;
-    if (this.state.esttime === 0){
+    if (this.state.course.esttime === 0){
       renderTime = '--:--';} else {
-      renderTime = this.state.esttime.toString().toHHMMSS();
+      renderTime = this.state.course.esttime.toString().toHHMMSS();
       }
     const descriptionText = "Enter a name and description for your route below. On the next page, you'll be able to see, edit, and share your route.";
     let saveButton;
@@ -323,11 +429,11 @@ class CourseCreate extends React.Component {
         <div>
           <ul className='create-stats'>
             <li className='create-stat-item'>
-              Row
-              <p className='create-stat-text'>Cruise Type</p>
+              {this.renderDateTime()}
+              <p className='create-stat-text'>Date & Time</p>
             </li>
             <li className='create-stat-item'>
-              {this.state.distance.toFixed(1)}<abbr className='create-unit'>mi.</abbr><br />
+              {this.state.course.distance.toFixed(1)}<abbr className='create-unit'>mi.</abbr><br />
             <p className='create-stat-text'>Distance</p>
             </li>
             <li className='create-stat-item'>
@@ -348,7 +454,6 @@ class CourseCreate extends React.Component {
 
 const mapStateToProps = (state) => {
   return {
-    user_id: state.session.currentUser.id,
     errors: state.errors
   };
 };

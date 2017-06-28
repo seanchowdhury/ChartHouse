@@ -6,9 +6,17 @@ json.courses do
   user.courses.each do |course|
     author = course.user
     json.set! course.id do
-      json.extract! course, :id, :title, :description, :waypoints, :created_at
+      json.extract! course, :id, :title, :description, :waypoints, :created_at, :distance, :esttime
       json.author_fname author.fname
       json.author_lname author.lname
+    end
+  end
+end
+
+json.charts do
+  user.charts.each do |chart|
+    json.set! chart.id do
+      json.extract! chart, :id, :title, :start_time
     end
   end
 end

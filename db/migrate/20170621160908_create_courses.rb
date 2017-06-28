@@ -5,6 +5,9 @@ class CreateCourses < ActiveRecord::Migration
       t.string :title, null: false
       t.text :description
       t.text :waypoints, null: false
+      t.float :distance, null: false
+      t.string :esttime, null: false
+      t.datetime :start_time, null: false
       t.timestamps null: false
     end
 
