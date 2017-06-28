@@ -33,13 +33,25 @@ class ChartCreate extends React.Component {
 
   saveChart() {
     const start_time = new Date(`${this.state.date} ${this.state.time}`);
-    const chart_stats = { key: 'stats' };
-    const chart = merge({}, this.state, {boat_id: 1, start_time, chart_stats})
-    this.props.createChart(chart)
-      .then( ({chart}) => {
-        this.props.history.push(`/charts/${Object.keys(chart)[0]}`)
-      }
-    );
+    const course = this.props.courses[this.state.course_id]
+    const decodedPath = google.maps.geometry.encoding.decodePath(course.waypoints)
+    const lat = decodedPath[0].lat()
+    const lng = decodedPath[0].lng()
+    const start = Date.parse(start_time) / 1000
+    const weather = $.ajax({
+      type: 'GET',
+      url: `http://history.openweathermap.org/data/2.5/history/city?lat=${lat}&lon=${lng}&type=hour&start=${start}`,
+      dataType : "jsonp",
+    }).then( (weatherData) => {
+      debugger
+      const chart_stats = { key: 'stats' };
+      const chart = merge({}, this.state, {boat_id: 1, start_time, chart_stats})
+      this.props.createChart(chart)
+        .then( ({chart}) => {
+          this.props.history.push(`/charts/${Object.keys(chart)[0]}`)
+        }
+      );
+    })
   }
 
   render() {
@@ -110,29 +122,29 @@ class ChartCreate extends React.Component {
               <label>Duration<br />
                 <div className='chart-duration'>
                   <div className='chart-duration-inputs'>
-                    <input onChange={this.update('hours')} value={this.state.hours} />
+                    <input type='number' onChange={this.update('hours')} value={this.state.hours} />
                     <abbr>hr</abbr>
                   </div>
                   <div className='chart-duration-inputs'>
-                    <input onChange={this.update('minutes')} value={this.state.minutes} />
+                    <input type='number' onChange={this.update('minutes')} value={this.state.minutes} />
                     <abbr>min</abbr>
                   </div>
                   <div className='chart-duration-inputs'>
-                    <input onChange={this.update('seconds')} value={this.state.seconds} />
+                    <input type='number' onChange={this.update('seconds')} value={this.state.seconds} />
                     <abbr>sec</abbr>
                   </div>
                 </div>
               </label>
             </div>
             <div id='create-logistics-input'>
-              <label>Date & Time<br />
-                  <input value={this.state.date} type="date" onChange={this.update('date')} id='chart-date'/>
+              <label>Actual Departure Date & Time<br />
+                  <input value={this.state.date} max={Date()} type="date" onChange={this.update('date')} id='chart-date'/>
                   <select value={this.state.time} onChange={this.update('time')}>
                     {timeSelect}
                   </select>
               </label>
               <label>Title<br />
-                  <input id='chart-title-input' onChange={this.update('title')} value={this.state.title} placeholder='Voyage to Dinosaur BBQ'/>
+                  <input id='chart-title-input' onChange={this.update('title')} value={this.state.title} placeholder='A little jaunt'/>
               </label>
             </div>
             <div id='create-details-input'>

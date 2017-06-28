@@ -256,16 +256,16 @@ class CourseCreate extends React.Component {
     };
 
     navigator.geolocation.getCurrentPosition( (pos)=> {
+      this.map = new google.maps.Map(this.mapNode, mapOptions );
+      this.map.addListener('click', (e) => {
+        this.addMarker(e.latLng);
+      });
       this.map.setCenter({
         lat: pos.coords.latitude,
         lng: pos.coords.longitude
       });
-    });
+    })
 
-    this.map = new google.maps.Map(this.mapNode, mapOptions );
-    this.map.addListener('click', (e) => {
-      this.addMarker(e.latLng);
-    });
   }
 
   openModal() {
@@ -324,8 +324,8 @@ class CourseCreate extends React.Component {
 
     return (
       <div>
-        <input value={this.state.date} min={today} type="date" onChange={this.updateDateTime('date')}/>
-        <select value={this.state.time} onChange={this.updateDateTime('time')}>
+        <input value={this.state.date} min={today} type="date" onChange={this.updateDateTime('date')} className='create-course-time' />
+        <select value={this.state.time} onChange={this.updateDateTime('time')} className='create-course-time'>
           {timeSelect}
         </select>
       </div>
@@ -369,6 +369,7 @@ class CourseCreate extends React.Component {
                 <label>Description <br /><textarea onChange={this.update('description')} value={this.state.course.description} /></label>
               </form>
               <ul className='save-modal-buttons'>
+                {this.props.errors}
                 <li><button onClick={() => this.closeModal()} className='modal-cancel'>Cancel</button></li>
                 <li><button onClick={() => this.saveMap()} className='modal-save'>Save</button></li>
               </ul>
