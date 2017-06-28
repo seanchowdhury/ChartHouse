@@ -21,7 +21,6 @@ class CourseCreate extends React.Component {
     this.addMarker = this.addMarker.bind(this);
     this.undoMarker = this.undoMarker.bind(this);
     this.state = {
-      coursePath: [],
       lat: 40.728420,
       lng: -74.013389,
       isModalOpen: false,
@@ -73,21 +72,11 @@ class CourseCreate extends React.Component {
     )
   }
 
-  checkTerrain(position) {
-
-    const geocoder = new google.maps.Geocoder;
-    geocoder.geocode({'location': position}, function(results, status) {
-      if (status === 'OK') {
-      }
-    });
-  }
-
   addMarker(position) {
     let strokeColor = '#000000';
     if (this.pathMarkers.length < 1) {
       strokeColor = '#01B60D';
     }
-    // this.checkTerrain(position);
     const marker = new google.maps.Marker({
       position,
       map: this.map,
@@ -105,10 +94,8 @@ class CourseCreate extends React.Component {
    });
 
     this.pathMarkers.push(marker);
-    const markers = this.pathMarkers;
-    if (markers.length > 1) {
+    if (this.pathMarkers.length > 1) {
       this.renderPolyline(this.pathMarkers);
-
     }
   }
 
@@ -122,12 +109,10 @@ class CourseCreate extends React.Component {
   }
 
   clearAll() {
-    if (this.pathMarkers.length > 0){
-      this.pathMarkers.forEach((marker) => marker.setMap(null));
-      this.pathMarkers = [];
-      this.polyline.setMap(null);
-      this.setState( merge({}, this.state.course, {distance: 0, esttime: 0} ));
-    }
+    this.pathMarkers.forEach((marker) => marker.setMap(null));
+    this.pathMarkers = [];
+    this.polyline.setMap(null);
+    this.setState( {course: merge({}, this.state.course, {distance: 0, esttime: 0} )});
   }
 
   renderPolyline(pathMarkers) {
@@ -149,10 +134,12 @@ class CourseCreate extends React.Component {
     this.polyline = coursePoly;
     coursePoly.setMap(this.map);
     const distance = google.maps.geometry.spherical.computeLength(coursePoly.getPath().getArray()) / 1609.34;
-
+    const esttime = (distance / 2.65 * 3600);
+    debugger
     const encryptedWaypoints = google.maps.geometry.encoding.encodePath(this.polyline.getPath());
+    debugger
     this.setState({
-      course: merge({}, this.state.course, {distance, esttime: distance /2.65 * 3600, waypoints: encryptedWaypoints})
+      course: merge({}, this.state.course, {distance, esttime, waypoints: encryptedWaypoints})
     });
   }
 

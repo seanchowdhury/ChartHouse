@@ -34,24 +34,18 @@ class ChartCreate extends React.Component {
   saveChart() {
     const start_time = new Date(`${this.state.date} ${this.state.time}`);
     const course = this.props.courses[this.state.course_id]
+    debugger
     const decodedPath = google.maps.geometry.encoding.decodePath(course.waypoints)
     const lat = decodedPath[0].lat()
     const lng = decodedPath[0].lng()
-    const start = Date.parse(start_time) / 1000
-    const weather = $.ajax({
-      type: 'GET',
-      url: `http://history.openweathermap.org/data/2.5/history/city?lat=${lat}&lon=${lng}&type=hour&start=${start}`,
-      dataType : "jsonp",
-    }).then( (weatherData) => {
-      debugger
-      const chart_stats = { key: 'stats' };
-      const chart = merge({}, this.state, {boat_id: 1, start_time, chart_stats})
-      this.props.createChart(chart)
-        .then( ({chart}) => {
-          this.props.history.push(`/charts/${Object.keys(chart)[0]}`)
+    const start = start_time.toISOString().slice(0,10).replace(/-/g,"");
+    const chart = merge({}, this.state, {boat_id: 1, start_time})
+    this.props.createChart(chart)
+      .then( ({chart}) => {
+        debugger
+        this.props.history.push(`/charts/${Object.keys(chart)[0]}`)
         }
       );
-    })
   }
 
   render() {

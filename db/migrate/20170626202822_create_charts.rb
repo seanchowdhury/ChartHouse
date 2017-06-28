@@ -7,7 +7,6 @@ class CreateCharts < ActiveRecord::Migration
       t.string :title, null: false
       t.text :description
       t.date :start_time, null: false
-      t.text :chart_stats, null: false
 
       t.timestamps null: false
     end

@@ -1,7 +1,7 @@
 author = @chart.user
 
 json.set! @chart.id do
-  json.extract! @chart, :id, :title, :description, :boat_id, :start_time, :chart_stats
+  json.extract! @chart, :id, :title, :description, :boat_id, :start_time
   json.course do
     json.extract! chart.course, :id, :waypoints
   end
