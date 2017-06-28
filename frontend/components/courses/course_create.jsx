@@ -251,7 +251,14 @@ class CourseCreate extends React.Component {
         lat: pos.coords.latitude,
         lng: pos.coords.longitude
       });
-    })
+    },
+     () => {
+       this.map = new google.maps.Map(this.mapNode, mapOptions );
+       this.map.addListener('click', (e) => {
+         this.addMarker(e.latLng);
+       });
+     }
+    )
 
   }
 
