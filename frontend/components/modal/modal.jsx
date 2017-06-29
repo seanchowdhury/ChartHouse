@@ -1,21 +1,19 @@
 import React from 'react';
 
 class Modal extends React.Component {
-
   render() {
     if (this.props.isOpen === false){
       return null;
     } else {
       let modalStyle = {
         position: 'absolute',
-        transform: 'translate(-50%, -%50)',
         zIndex: '9999',
         height: '310px',
         width: '600px',
-        background: '#fff'
+        background: 'white'
       };
       let backdropStyle = {
-        position: 'absolute',
+        position: 'fixed',
         width: '100%',
         height: '100%',
         top: '0px',
@@ -24,13 +22,10 @@ class Modal extends React.Component {
         background: 'rgba(0, 0, 0, 0.78)'
       };
       return (
-        <div className='save-modal'>
-          <div className='inner-save-modal' style={modalStyle}>
+        <div className='save-modal' onClick={this.close.bind(this)}>
+          <div className='inner-save-modal' style={modalStyle} onClick={(e) => e.stopPropagation()}>
             {this.props.children}
           </div>
-          {!this.props.noBackdrop &&
-              <div className={this.props.backdropClassName} style={backdropStyle}
-                   onClick={e => this.close(e)}/>}
         </div>
       );
     }

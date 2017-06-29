@@ -3,12 +3,13 @@ import { receiveErrors } from './error_actions';
 
 export const RECEIVE_CURRENT_USER = 'RECEIVE_CURRENT_USER';
 
-export const receiveCurrentUser = ({user, courses, charts}) => ({
+export const receiveCurrentUser = ({user, courses, charts}) => {
+  return {
   type: RECEIVE_CURRENT_USER,
   currentUser: user,
   courses,
   charts
-});
+}};
 
 export const signup = user => dispatch => {
   return ApiUtil.signup(user)

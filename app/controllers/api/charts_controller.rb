@@ -25,6 +25,6 @@ class Api::ChartsController < ApplicationController
   private
 
   def chart_params
-    params.require(:chart).permit(:course_id, :boat_id, :title, :description, :start_time)
+    params.require(:chart).permit(:course_id, :boat_id, :title, :description, :start_time, :duration)
   end
 end

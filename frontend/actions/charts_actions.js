@@ -30,8 +30,8 @@ export const requestCharts = () => dispatch => {
     ));
 };
 
-export const requestChart = () => dispatch => {
-  return ApiUtil.requestChart()
+export const requestChart = (chart) => dispatch => {
+  return ApiUtil.requestChart(chart)
     .then(chart => (
       dispatch(receiveChart(chart))
     ));

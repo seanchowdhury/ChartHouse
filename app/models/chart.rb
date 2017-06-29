@@ -1,5 +1,5 @@
 class Chart < ActiveRecord::Base
-  validates_presence_of :user_id, :course_id, :boat_id, :title, :start_time
+  validates_presence_of :user_id, :course_id, :boat_id, :title, :start_time, :duration
   belongs_to :user
   belongs_to :course
   belongs_to :boat

@@ -37,8 +37,8 @@ class ChartCreate extends React.Component {
     const decodedPath = google.maps.geometry.encoding.decodePath(course.waypoints)
     const lat = decodedPath[0].lat()
     const lng = decodedPath[0].lng()
-    const start = start_time.toISOString().slice(0,10).replace(/-/g,"");
-    const chart = merge({}, this.state, {boat_id: 1, start_time})
+    const duration = (this.state.hours * 3600) + (this.state.minutes * 60) + (this.state.seconds * 1)
+    const chart = merge({}, this.state, {boat_id: 1, start_time, duration})
     this.props.createChart(chart)
       .then( ({chart}) => {
 
@@ -108,7 +108,7 @@ class ChartCreate extends React.Component {
             <div id='create-stats-input'>
               <label>Course <br/>
                 <select value={this.state.course_id} onChange={this.update('course_id')}>
-                  <option disabled value={this.state.course_id}> -- choose a course -- </option>
+                  <option disabled value='null'> -- choose a course -- </option>
                   {courseList}
                 </select>
               </label>

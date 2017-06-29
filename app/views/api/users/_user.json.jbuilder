@@ -15,8 +15,11 @@ end
 
 json.charts do
   user.charts.each do |chart|
+    author = chart.user
     json.set! chart.id do
-      json.extract! chart, :id, :title, :start_time
+      json.extract! chart, :id, :title, :start_time, :description, :boat_id, :course_id, :duration
+      json.author_fname author.fname
+      json.author_lname author.lname
     end
   end
 end
