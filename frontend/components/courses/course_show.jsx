@@ -227,7 +227,7 @@ const mapStateToProps = ({courses}, {match}) => {
   return {
     courseId,
     course
-};
+  };
 };
 
 const mapDispatchToProps = (dispatch) => {

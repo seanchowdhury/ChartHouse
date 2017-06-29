@@ -376,13 +376,8 @@ class CourseCreate extends React.Component {
           </ul>
           <Link to='/courses' className='cc-header-right'>Exit Builder</Link>
         </div>
-
         <div className='create-tools'>
-          <div className='create-search'>
-            <input placeholder="futureSearchBar"></input><button><i className="fa fa-search fa-fw fa-2x" aria-hidden="true"></i>
-              </button>
-          </div>
-          <button onClick={this.undoMarker} className='undo-buttons'><i className="fa fa-undo fa-fw fa-lg" aria-hidden="true"></i>
+          <button onClick={this.undoMarker} className='undo-buttons'><i id='the-undo-button' className="fa fa-undo fa-fw fa-lg" aria-hidden="true"></i>
             <br /><abbr>Undo</abbr></button>
           <button onClick={this.clearAll} className='undo-buttons'><i className="fa fa-times fa-fw fa-lg" aria-hidden="true"></i>
             <br /><abbr>Clear</abbr></button>

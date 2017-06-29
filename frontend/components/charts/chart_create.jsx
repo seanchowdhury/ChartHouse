@@ -15,7 +15,7 @@ class ChartCreate extends React.Component {
       hours: "",
       minutes: "",
       seconds: "",
-      course_id: "",
+      course_id: "null",
       title: "",
       boat: "",
       description: "",
@@ -41,7 +41,7 @@ class ChartCreate extends React.Component {
     const chart = merge({}, this.state, {boat_id: 1, start_time})
     this.props.createChart(chart)
       .then( ({chart}) => {
-  
+
         this.props.history.push(`/charts/${Object.keys(chart)[0]}`)
         }
       );
@@ -108,7 +108,7 @@ class ChartCreate extends React.Component {
             <div id='create-stats-input'>
               <label>Course <br/>
                 <select value={this.state.course_id} onChange={this.update('course_id')}>
-                  <option disabled value='null'> -- choose a course -- </option>
+                  <option disabled value={this.state.course_id}> -- choose a course -- </option>
                   {courseList}
                 </select>
               </label>

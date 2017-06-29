@@ -2,7 +2,6 @@ import React from 'react';
 import { Link, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { logout } from '../../actions/session_actions';
-import { Dropdown } from './dropdown';
 
 const DashboardMenu = () => (
   <div>
@@ -19,26 +18,36 @@ class DashboardNav extends React.Component {
 
 
   render() {
-    
+
 
     return (
       <div className='navbar'>
          <div className='navbar-left'>
-          <li className='navbar-link'><Link to="/dashboard"><h1 className='dash-logo'>KUNKKA</h1></Link></li>
-          <li className='navbar-link'>
-            <Link to='/dashboard'>
-              <ul><Dropdown navItem={'Dashboard'} menu={DashboardMenu}/></ul>
-            </Link>
-          </li>
+           <Link to='/dashboard' className='dash-logo'>KUNKKA</Link>
+            <div className="dropdown">
+              <Link to='/dashboard' className="dropbtn">Dashboard</Link>
+              <div className="dropdown-content">
+                <Link to='/courses'>Courses</Link>
+                <Link to='/charts'>Charts</Link>
+              </div>
+            </div>
+          </div>
         <ul className='navbar-right'>
-          <li className='navbar-link'>User Settings
-            <ul id='user-dropdown' className='dropdown'>
-              <li className='dropdown-link'><button onClick={this.props.logout}>Logout</button></li>
-            </ul>
-          </li>
+          <div className="dropdown">
+            <img className="dropbtn" className='profile-pic-dash' src={window.images.profilePic}/>
+            <div className="dropdown-content" id='dash-profile-content'>
+              <button id='dash-logout' onClick={this.props.logout}>Logout</button>
+            </div>
+          </div>
+          <div className="dropdown">
+            <i className="dropbtn" id='dash-add' className="fa fa-plus-square-o" aria-hidden="true"></i>
+            <div className="dropdown-content" id='dash-add-content'>
+              <Link to='/newcourse'>Create Course</Link>
+              <Link to='/newchart'>Create Chart</Link>
+            </div>
+          </div>
         </ul>
       </div>
-    </div>
     );
   }
 

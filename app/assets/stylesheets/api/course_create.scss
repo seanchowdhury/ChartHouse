@@ -78,11 +78,16 @@
   height: 40px;
 }
 .undo-buttons {
+  margin-left: 30px;
   padding: 6px 10px 6px 10px;
   background-color: #f1f1f1;
   height: 50px;
   font-size: 17px;
   color: #999999;
+}
+
+#the-undo-button {
+  margin-top: 3px;
 }
 
 .undo-buttons abbr {
