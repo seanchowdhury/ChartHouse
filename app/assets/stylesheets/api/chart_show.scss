@@ -39,6 +39,12 @@
   border-bottom: 1px solid lightgrey;
 }
 
+#chart-show-stats {
+  border-left: 1px solid lightgrey;
+  color: rgb(51, 51, 51);
+  font-size: 12px;
+}
+
 #chart-show-description {
   border-right: 1px solid lightgrey;
   padding: 20px 15px;
@@ -103,6 +109,7 @@
 
 .edit-modal {
   position: fixed;
+  border: 1px solid lightgrey;
 }
 
 .save-modal {
@@ -113,4 +120,63 @@
   bottom: 0;
   z-index: 9998;
   background: rgba(0, 0, 0, 0.78);
+}
+
+#show-weather {
+  margin: 10px 25px;
+}
+
+.edit-header {
+  font-size: 30px;
+  color: rgb(51, 51, 51);
+  padding: 15px 20px;
+  background-color: #F7F7F7;
+  display: flex;
+  justify-content: space-between;
+  border-bottom: 1px solid lightgrey;
+}
+
+.edit-post {
+  background-color: #fc4c02;
+  color: white;
+  font-size: 14px;
+  padding: 10px;
+}
+
+.edit-body {
+  background-color: #F0F0F0;
+  font-size: 12px;
+  font-weight: bold;
+  line-height: 180%;
+  color: #666666;
+  display: flex;
+  justify-content: flex-start;
+  padding: 20px 40px;
+}
+
+.edit-body li {
+  font-weight: normal;
+}
+
+.edit-body input {
+  height: 30px;
+  width: 356px;
+  padding: 1px 10px;
+  border: 1px solid lightgrey;
+  color: #7a7a7a;
+}
+
+.edit-body textarea {
+  resize: none;
+  font-weight: normal;
+  font-size: 14px;
+  height: 90px;
+  width: 356px;
+  padding: 3px 10px;
+  border: 1px solid lightgrey;
+  color: #7a7a7a;
+}
+
+.edit-form {
+  margin-right: 40px;
 }

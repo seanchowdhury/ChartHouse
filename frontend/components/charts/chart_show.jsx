@@ -14,63 +14,17 @@ class ChartShow extends React.Component {
     this.openModal = this.openModal.bind(this);
     this.closeModal = this.closeModal.bind(this);
     this.renderWeather = this.renderWeather.bind(this);
-    this.weather = "";
     this.state = {
+      title: this.props.chart.title,
+      description: this.props.chart.description,
       isModalOpen: false,
+      weather: "",
       chart: {
         boat: this.props.boat,
         description: this.props.description,
         title: this.props.title
       }
     }
-  }
-
-  componentWillMount() {
-    const datetime = new Date(this.props.chart.start_time);
-    let hours = datetime.getHours();
-    let minutes = datetime.getMinutes();
-    if (minutes < 10) {
-      minutes = `0${minutes}`;
-    }
-    let AMPM = 'AM';
-    if (hours > 12) {
-      AMPM = 'PM';
-      hours = hours - 12
-    }
-    if (hours === 0) {
-      hours = 12;
-    }
-    this.time = `${hours}:${minutes} ${AMPM}`
-    const day = datetime.getDay();
-    const week = ['Sunday','Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
-    this.date = `${week[day]} ${timeConverter(datetime)}`;
-    this.pace = (this.props.course.distance / (this.props.chart.duration / 3600 ) * 0.868976).toFixed(2);
-    const diff = (this.props.chart.duration - this.props.course.esttime)
-    if (diff > 1) {
-      this.timeDiff = `+${diff.toString().toHHMMSS()}`;
-    } else {
-      this.timeDiff = diff.toString().toHHMMSS();
-    }
-    debugger
-    const year = datetime.getYear() + 1900;
-    let month = datetime.getMonth() + 1
-    if (month < 10) {
-      month = `0${month}`
-    }
-    let date = datetime.getDate();
-    if (date < 10) {
-      date = `0${date}`
-    }
-    const queryDate = `${year}${month}${date}`
-    debugger
-    $.ajax({
-      type: 'GET',
-      url: `http://api.wunderground.com/api/0f6b676260939449/history_YYYYMMDD/q/CA/San_Francisco.json`
-    }).then( (weatherData) => renderWeather(weatherData))
-  }
-
-  renderWeather(weatherData) {
-
   }
 
   componentDidMount() {
@@ -218,6 +172,53 @@ class ChartShow extends React.Component {
     });
 
     this.map.fitBounds(bounds);
+
+    const datetime = new Date(this.props.chart.start_time);
+    let hours = datetime.getHours();
+    let minutes = datetime.getMinutes();
+    if (minutes < 10) {
+      minutes = `0${minutes}`;
+    }
+    let AMPM = 'AM';
+    if (hours > 12) {
+      AMPM = 'PM';
+      hours = hours - 12
+    }
+    if (hours === 0) {
+      hours = 12;
+    }
+    this.time = `${hours}:${minutes} ${AMPM}`
+    const day = datetime.getDay();
+    const week = ['Sunday','Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
+    this.date = `${week[day]} ${timeConverter(datetime)}`;
+    this.pace = (this.props.course.distance / (this.props.chart.duration / 3600 ) * 0.868976).toFixed(2);
+    const diff = (this.props.chart.duration - this.props.course.esttime)
+    if (diff > 0) {
+      this.timeDiff = `+${diff.toString().toHHMMSS()}`;
+    } else {
+      this.timeDiff = `-${Math.abs(diff).toString().toHHMMSS()}`;
+    }
+    const year = datetime.getYear() + 1900;
+    let month = datetime.getMonth() + 1
+    if (month < 10) {
+      month = `0${month}`
+    }
+    let date = datetime.getDate();
+    if (date < 10) {
+      date = `0${date}`
+    }
+    const queryDate = `${year}${month}${date}`
+    const queryLocation = `${waypoints[0].lat},${waypoints[0].lng}`
+    $.ajax({
+      type: 'GET',
+      url: `http://api.wunderground.com/api/0f6b676260939449/history_${queryDate}/q/${queryLocation}.json`
+    }).then( (weatherData) => this.renderWeather(weatherData))
+  }
+
+  renderWeather(weatherData) {
+    const hour = parseInt(this.props.chart.start_time.slice(11,13));
+    const weather = weatherData.history.observations[hour];
+    this.setState({ weather });
   }
 
   openModal() {
@@ -226,6 +227,14 @@ class ChartShow extends React.Component {
 
   closeModal() {
     this.setState({ isModalOpen: false });
+  }
+
+  update(field) {
+    return (e) => {
+      this.setState({
+        [field]: e.currentTarget.value
+      });
+    }
   }
 
   render() {
@@ -238,10 +247,55 @@ class ChartShow extends React.Component {
         Add a description
       </button>
     }
+    let weatherInfo = ""
+    if (this.state.weather) {
+      const icon = `wu wu-black wu-64 wu-${this.state.weather.icon}`
+      weatherInfo = (
+        <div id='show-weather'>
+          <div>
+            Conditions: {this.state.weather.conds} <i className={icon}></i>
+          </div>
+          <div>
+            Tempurate: {this.state.weather.tempi}
+          </div>
+          <div>
+            Visibility: {this.state.weather.visi} mi.
+          </div>
+          <div>
+            Wind: {this.state.weather.wspdi} mph.
+          </div>
+        </div>
+      );
+    }
+    let titleInput;
+    if (this.props.errors.title) {
+      titleInput = <input onChange={this.update('title')} className='input-with-errors' value={this.state.title} />
+      } else {
+      titleInput = <input onChange={this.update('title')} value={this.state.title} />
+    }
     return (
       <div>
         <Modal className='edit-modal' isOpen={this.state.isModalOpen} onClose={() => this.closeModal()}>
-          <h1>ahahaha</h1>
+          <div className='edit-header'>
+            <h1 className='edit-title'>Edit Chart</h1>
+            <button className='edit-post'>Save & View Chart</button>
+          </div>
+          <section className='edit-body'>
+            <form className='edit-form'>
+              <label>Title <br />
+              {titleInput}
+              <div className='modal-errors'>{this.props.errors.title}</div></label>
+              <br />
+              <label>Description <br /><textarea placeholder='say something' onChange={this.update('description')} value={this.state.description} /></label>
+            </form>
+            <div>
+              <ul>Details
+                <li>{this.date}</li>
+                <li>{this.props.course.distance.toFixed(1)} mi</li>
+                <li>{this.props.chart.duration.toString().toHHMMSS()}</li>
+              </ul>
+            </div>
+          </section>
         </Modal>
         <DashboardNav />
         <div id='chart-show-container'>
@@ -285,15 +339,14 @@ class ChartShow extends React.Component {
                   <abbr className='chart-show-label'>Est Differential</abbr>
                   </div>
                 </div>
+                {weatherInfo}
                 <div id='boat-name'>
                   <h2>Crew: none</h2>
+
                 </div>
               </div>
             </div>
             <div>
-              <div>
-                {this.weather}
-              </div>
               <div id='chart-show-map' ref={ map => this.mapNode = map }>
                 map
               </div>
@@ -307,13 +360,14 @@ class ChartShow extends React.Component {
 
 }
 
-const mapStateToProps = ({charts, courses}, {match}) => {
+const mapStateToProps = ({charts, courses, errors}, {match}) => {
   const chartId = parseInt(match.params.chartId);
   const chart = charts[chartId];
   const course = courses[chart.course_id];
   return {
     chart,
-    course
+    course,
+    errors
   }
 };
 
