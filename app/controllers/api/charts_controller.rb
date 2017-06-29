@@ -19,6 +19,15 @@ class Api::ChartsController < ApplicationController
     end
   end
 
+  def update
+    @chart = Chart.find(params['chart']['id'])
+    if @chart.update(chart_params)
+      render "api/charts/show"
+    else
+      render json: @chart.errors.messages, status: 422
+    end
+  end
+
   def destroy
   end
 

@@ -26,8 +26,9 @@
 
 #chart-show-header {
   width: 926px;
-  padding: 9.5px 20px;
+  padding: 11px 20px;
   font-size: 20px;
+  background-color: rgb(247,247,247);
   border: 1px solid lightgrey;
 }
 
@@ -166,6 +167,16 @@
   color: #7a7a7a;
 }
 
+.edit-button {
+  padding: 10px;
+  background-color: rgb(230, 230, 230);
+}
+
+.edit-button:hover {
+  background-color: rgb(210,210,210);
+  text-decoration: underline;
+}
+
 .edit-body textarea {
   resize: none;
   font-weight: normal;
@@ -179,4 +190,33 @@
 
 .edit-form {
   margin-right: 40px;
+}
+
+.chart-dropbtn {
+
+}
+
+.chart-dropbtn:hover {
+}
+
+.chart-dropdown {
+
+}
+
+.chart-dropdown:hover {
+  z-index: 1;
+}
+
+.chart-dropdown-content {
+    display: none;
+}
+
+.chart-dropdown-content a {
+}
+
+.chart-dropdown-content a:hover {
+  background-color: #E4E4E4;
+}
+.chart-dropdown:active .dropdown-content {
+    display: block;
 }

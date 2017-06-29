@@ -19,3 +19,11 @@ export const requestCharts = () => {
     url: '/api/charts'
   });
 }
+
+export const editChart = (chart) => {
+  return $.ajax({
+    method: 'PATCH',
+    url: `/api/charts/${chart.id}`,
+    data: {chart}
+  });
+}

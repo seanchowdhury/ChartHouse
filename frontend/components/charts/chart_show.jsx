@@ -3,9 +3,10 @@ import ReactDOM from 'react-dom';
 import DashboardNav from '../dashboard/dashboard_header';
 import { connect } from 'react-redux';
 import { withRouter, Link } from 'react-router-dom';
-import { requestChart } from '../../actions/charts_actions';
+import { requestChart, editChart } from '../../actions/charts_actions';
 import { timeConverter } from '../../util/misc_util';
 import Modal from '../modal/modal';
+import {merge} from 'lodash'
 import * as ApiUtil from '../../util/charts_api_util';
 
 class ChartShow extends React.Component {
@@ -14,9 +15,13 @@ class ChartShow extends React.Component {
     this.openModal = this.openModal.bind(this);
     this.closeModal = this.closeModal.bind(this);
     this.renderWeather = this.renderWeather.bind(this);
+    this.handleEdit = this.handleEdit.bind(this);
     this.state = {
-      title: this.props.chart.title,
-      description: this.props.chart.description,
+      editChart: {
+        id: this.props.chart.id,
+        title: this.props.chart.title,
+        description: this.props.chart.description,
+      },
       isModalOpen: false,
       weather: "",
       chart: {
@@ -229,10 +234,15 @@ class ChartShow extends React.Component {
     this.setState({ isModalOpen: false });
   }
 
+  handleEdit(chart) {
+    this.props.editChart(chart)
+      .then(() => this.closeModal());
+  }
+
   update(field) {
     return (e) => {
       this.setState({
-        [field]: e.currentTarget.value
+        editChart: merge({}, this.state.editChart, {[field]: e.currentTarget.value})
       });
     }
   }
@@ -271,14 +281,14 @@ class ChartShow extends React.Component {
     if (this.props.errors.title) {
       titleInput = <input onChange={this.update('title')} className='input-with-errors' value={this.state.title} />
       } else {
-      titleInput = <input onChange={this.update('title')} value={this.state.title} />
+      titleInput = <input onChange={this.update('title')} value={this.state.editChart.title} />
     }
     return (
       <div>
         <Modal className='edit-modal' isOpen={this.state.isModalOpen} onClose={() => this.closeModal()}>
           <div className='edit-header'>
             <h1 className='edit-title'>Edit Chart</h1>
-            <button className='edit-post'>Save & View Chart</button>
+            <button onClick={() => {this.handleEdit(this.state.editChart)}} className='edit-post'>Save & View Chart</button>
           </div>
           <section className='edit-body'>
             <form className='edit-form'>
@@ -286,7 +296,7 @@ class ChartShow extends React.Component {
               {titleInput}
               <div className='modal-errors'>{this.props.errors.title}</div></label>
               <br />
-              <label>Description <br /><textarea placeholder='say something' onChange={this.update('description')} value={this.state.description} /></label>
+              <label>Description <br /><textarea placeholder='say something' onChange={this.update('description')} value={this.state.editChart.description} /></label>
             </form>
             <div>
               <ul>Details
@@ -303,9 +313,15 @@ class ChartShow extends React.Component {
             <button onClick={this.openModal} className='chart-show-buttons'>
               <i className="fa fa-pencil" aria-hidden="true"></i>
             </button>
-            <button onClick={this.openModal} className='chart-show-buttons'>
-              <i className="fa fa-wrench" aria-hidden="true"></i>
-            </button>
+            <div className='chart-dropdown'>
+              <button className='chart-show-buttons' className='chart-dropbtn'>
+                <i className="fa fa-wrench" aria-hidden="true"></i>
+              </button>
+              <ul className='chart-dropdown-content'>
+                <li><a href='twitter.com'>Share</a></li>
+                <li><button>Delete</button></li>
+              </ul>
+            </div>
           </div>
           <div id='chart-show-body'>
             <h1 id='chart-show-header'>
@@ -373,7 +389,7 @@ const mapStateToProps = ({charts, courses, errors}, {match}) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-
+    editChart: (chart) => dispatch(editChart(chart))
   };
 };
 

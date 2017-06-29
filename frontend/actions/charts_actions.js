@@ -36,3 +36,10 @@ export const requestChart = (chart) => dispatch => {
       dispatch(receiveChart(chart))
     ));
 };
+
+export const editChart = (chart) => dispatch => {
+  return ApiUtil.editChart(chart)
+    .then(chart => (
+      dispatch(receiveChart(chart))
+    ));
+};
