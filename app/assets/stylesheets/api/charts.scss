@@ -80,11 +80,9 @@ tr:nth-child(even) {background-color: #f2f2f2}
 }
 
 .table-row button {
-  background-color: none;
+  background-color: transparent;
   color: #007FB6;
 }
-
-.table-row button:nth-child(odd) {background-color: #f2f2f2}
 
 .table-row button:hover {
   text-decoration: underline;
