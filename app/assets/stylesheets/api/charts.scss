@@ -78,3 +78,14 @@ tr:nth-child(even) {background-color: #f2f2f2}
 .table-row a:hover {
   text-decoration: underline;
 }
+
+.table-row button {
+  background-color: none;
+  color: #007FB6;
+}
+
+.table-row button:nth-child(odd) {background-color: #f2f2f2}
+
+.table-row button:hover {
+  text-decoration: underline;
+}

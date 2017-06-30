@@ -34,7 +34,6 @@ class ChartsIndex extends React.Component {
   }
 
   render() {
-    debugger
     const tableContents = Object.keys(this.props.charts).map((key, index) => {
       const currentChart = this.props.charts[key];
       const dateTime = new Date(currentChart.start_time)
