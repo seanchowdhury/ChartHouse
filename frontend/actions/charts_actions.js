@@ -46,7 +46,7 @@ export const editChart = (chart) => dispatch => {
 
 export const deleteChart = (chart) => dispatch => {
   return ApiUtil.deleteChart(chart)
-  .then(chart => (
-    dispatch(receiveCharts())
+  .then((charts) => (
+    dispatch(receiveCharts(charts))
   ));
 };

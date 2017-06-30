@@ -45,12 +45,12 @@ class Auth extends React.Component {
 
   handleSubmit(e) {
     e.preventDefault();
-
     const user = this.state;
     this.props.processForm({user});
   }
 
-  demoLogIn() {
+  demoLogIn(e) {
+    e.preventDefault();
     const user = {
       email: 'email',
       password: 'password'

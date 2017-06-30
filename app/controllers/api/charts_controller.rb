@@ -31,6 +31,7 @@ class Api::ChartsController < ApplicationController
   def destroy
     @chart = Chart.find(params['id'])
     if @chart.delete
+      @charts = Chart.where(user_id: current_user.id);
       render "api/charts/index"
     else
       render json: @chart.errors.messages, status: 422

@@ -94,8 +94,8 @@ class CourseCreate extends React.Component {
     xhr.send();
 
     const onImageReceived = (image) => {
-       var urlCreator = window.URL || window.webkitURL;
-       var imageUrl = URL.createObjectURL(image);
+       const urlCreator = window.URL || window.webkitURL;
+       const imageUrl = URL.createObjectURL(image);
        const img = new Image;
        const canvas = document.createElement('canvas');
        img.onload = () => {
@@ -116,6 +116,7 @@ class CourseCreate extends React.Component {
     }
   }
 
+
   addMarker(position) {
     let strokeColor = '#000000';
     if (this.pathMarkers.length < 1) {
@@ -132,6 +133,7 @@ class CourseCreate extends React.Component {
       },
       draggable: true
     });
+    const numPathMarkers = this.pathMarkers.length;
 
     marker.addListener('dragend', () => {
       return this.renderPolyline(this.pathMarkers);
@@ -159,6 +161,54 @@ class CourseCreate extends React.Component {
     this.setState( {course: merge({}, this.state.course, {distance: 0, esttime: 0} )});
   }
 
+  checkStep(position) {
+
+    const xhr = new XMLHttpRequest();
+    const address = `http://maps.googleapis.com/maps/api/staticmap?center=${position.lat()},${position.lng()}&zoom=20&size=5x5&maptype=roadmap&sensor=false&key=AIzaSyBiE2efHKeAptVfVRtj9-ZDeHWPKgNjdNk`;
+    xhr.open('GET', address);
+    xhr.responseType = "blob";
+    xhr.onload = () => onImageReceived(xhr.response);
+    xhr.send();
+
+    const onImageReceived = (image) => {
+       const urlCreator = window.URL || window.webkitURL;
+       const imageUrl = URL.createObjectURL(image);
+       const img = new Image;
+       const canvas = document.createElement('canvas');
+       img.onload = () => {
+         canvas.width = img.width;
+         canvas.height = img.height;
+         canvas.getContext('2d').drawImage(img, 0, 0, img.width, img.height);
+         const HELLYEA = canvas.getContext('2d').getImageData(0, 0, 1, 1).data;
+         if (HELLYEA[0] === 163 && HELLYEA[1] === 204 && HELLYEA[2] === 255) {
+           () => {};
+         } else {
+          this.isLand = true;
+         }
+       };
+
+       img.id = 'terrain'
+       img.src = imageUrl
+
+    }
+  }
+
+  polylineSegmentor() {
+    const polyIndex = this.pathMarkers.length - 1;
+    const poly1 = this.pathMarkers[polyIndex-1].getPosition()
+    const poly2 = this.pathMarkers[polyIndex].getPosition()
+    const heading = google.maps.geometry.spherical.computeHeading(poly1, poly2)
+    let remainingDist = google.maps.geometry.spherical.computeDistanceBetween(poly1, poly2)
+    let startPos = poly1;
+    this.isLand = false;
+
+    while (remainingDist > 321 && this.isLand === false) {
+      let step = google.maps.geometry.spherical.computeOffset(startPos, 322, heading)
+      remainingDist -= 322;
+      this.checkStep(startPos)
+    };
+  }
+
   renderPolyline(pathMarkers) {
     if (this.polyline) {
       this.polyline.setMap(null);
@@ -167,6 +217,7 @@ class CourseCreate extends React.Component {
     for (let i = 0; i < pathMarkers.length; i++){
       path.push({ lat: pathMarkers[i].position.lat(), lng: pathMarkers[i].position.lng() });
     }
+    // this.polylineSegmentor();
 
     const coursePoly = new google.maps.Polyline({
       path,

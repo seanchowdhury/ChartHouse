@@ -17,6 +17,12 @@
   border: 1px solid lightgrey;
 }
 
+#chart-story {
+  overflow: scroll;
+  overflow-x: hidden;
+  height: 100px;
+}
+
 #chart-index-search strong {
   font-weight: bold;
   color: rgb(51, 51, 51);

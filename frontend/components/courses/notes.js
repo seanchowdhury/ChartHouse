@@ -16,7 +16,6 @@ const resolve = (arg) => {
   return HELLYEA;
 }
   const center = `${position.lat()},${position.lng()}`
-  debugger
   image({
     type: 'staticmap',
     center,

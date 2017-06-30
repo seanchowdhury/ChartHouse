@@ -5,6 +5,12 @@ import merge from 'lodash/merge';
 const ChartsReducer = (state = {}, action) => {
   Object.freeze(state);
   switch (action.type) {
+    case RECEIVE_CURRENT_USER:
+      if (action.charts) {
+        return action.charts;
+      } else {
+        return {};
+      }
     case RECEIVE_CHARTS:
       return action.charts;
     case RECEIVE_CHART:
