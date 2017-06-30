@@ -171,6 +171,7 @@ class CourseCreate extends React.Component {
     xhr.send();
 
     const onImageReceived = (image) => {
+
        const urlCreator = window.URL || window.webkitURL;
        const imageUrl = URL.createObjectURL(image);
        const img = new Image;
@@ -201,12 +202,13 @@ class CourseCreate extends React.Component {
     let remainingDist = google.maps.geometry.spherical.computeDistanceBetween(poly1, poly2)
     let startPos = poly1;
     this.isLand = false;
-
+    const promises = [];
     while (remainingDist > 321 && this.isLand === false) {
       let step = google.maps.geometry.spherical.computeOffset(startPos, 322, heading)
       remainingDist -= 322;
-      this.checkStep(startPos)
+      promises.push( this.checkStep(startPos) );
     };
+    Promise.all(promises);
   }
 
   renderPolyline(pathMarkers) {
@@ -217,8 +219,7 @@ class CourseCreate extends React.Component {
     for (let i = 0; i < pathMarkers.length; i++){
       path.push({ lat: pathMarkers[i].position.lat(), lng: pathMarkers[i].position.lng() });
     }
-    // this.polylineSegmentor();
-
+    //this.polylineSegmentor();
     const coursePoly = new google.maps.Polyline({
       path,
       geodesic: true,
