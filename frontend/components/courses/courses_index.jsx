@@ -10,11 +10,6 @@ import { timeConverter } from '../../util/misc_util';
 class CoursesIndex extends React.Component {
   constructor(props) {
     super(props);
-    this.deleteCourse = this.deleteCourse.bind(this);
-  }
-
-  deleteCourse() {
-    this.props.requestCourses();
   }
 
   render() {
@@ -78,7 +73,7 @@ class CoursesIndex extends React.Component {
 const mapStateToProps = ({courses}) => {
   return {
   courses
-};
+  };
 };
 
 const mapDispatchToProps = (dispatch) => {

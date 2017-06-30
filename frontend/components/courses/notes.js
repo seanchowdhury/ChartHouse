@@ -7,10 +7,8 @@ const resolve = (arg) => {
   const renderedImg = document.getElementById('terrain');
   debugger
   const canvas = document.createElement('canvas');
-  debugger
   canvas.width = renderedImg.width;
   canvas.height = renderedImg.height;
-  debugger
   canvas.getContext('2d').drawImage(renderedImg, 0, 0, renderedImg.width, renderedImg.height);
   debugger
   const HELLYEA = canvas.getContext('2d').getImageData(0, 0).data;

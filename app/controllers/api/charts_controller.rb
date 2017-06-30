@@ -29,6 +29,12 @@ class Api::ChartsController < ApplicationController
   end
 
   def destroy
+    @chart = Chart.find(params['id'])
+    if @chart.delete
+      render "api/charts/index"
+    else
+      render json: @chart.errors.messages, status: 422
+    end
   end
 
   private

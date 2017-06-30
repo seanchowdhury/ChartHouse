@@ -52,7 +52,7 @@ class Auth extends React.Component {
 
   demoLogIn() {
     const user = {
-      email: 'Scruffy',
+      email: 'email',
       password: 'password'
     }
     this.props.processForm({user});

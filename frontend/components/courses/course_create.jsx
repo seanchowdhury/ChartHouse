@@ -19,6 +19,7 @@ class CourseCreate extends React.Component {
     this.clearAll = this.clearAll.bind(this);
     this.renderPolyline = this.renderPolyline.bind(this);
     this.addMarker = this.addMarker.bind(this);
+    this.checkTerrain = this.checkTerrain.bind(this);
     this.undoMarker = this.undoMarker.bind(this);
     let today = new Date();
     let dd = today.getDate();
@@ -82,6 +83,37 @@ class CourseCreate extends React.Component {
         this.props.history.push(`/courses/${Object.keys(course)[0]}`)
       }
     )
+  }
+
+  checkTerrain(position) {
+    const xhr = new XMLHttpRequest();
+    const address = `http://maps.googleapis.com/maps/api/staticmap?center=${position.lat()},${position.lng()}&zoom=20&size=5x5&maptype=roadmap&sensor=false&key=AIzaSyBiE2efHKeAptVfVRtj9-ZDeHWPKgNjdNk`;
+    xhr.open('GET', address);
+    xhr.responseType = "blob";
+    xhr.onload = () => onImageReceived(xhr.response);
+    xhr.send();
+
+    const onImageReceived = (image) => {
+       var urlCreator = window.URL || window.webkitURL;
+       var imageUrl = URL.createObjectURL(image);
+       const img = new Image;
+       const canvas = document.createElement('canvas');
+       img.onload = () => {
+         canvas.width = img.width;
+         canvas.height = img.height;
+         canvas.getContext('2d').drawImage(img, 0, 0, img.width, img.height);
+         const HELLYEA = canvas.getContext('2d').getImageData(0, 0, 1, 1).data;
+         if (HELLYEA[0] === 163 && HELLYEA[1] === 204 && HELLYEA[2] === 255) {
+           this.addMarker(position)
+         } else {
+           () => {};
+         }
+       };
+
+       img.id = 'terrain'
+       img.src = imageUrl
+
+    }
   }
 
   addMarker(position) {
@@ -255,7 +287,7 @@ class CourseCreate extends React.Component {
     navigator.geolocation.getCurrentPosition( (pos)=> {
       this.map = new google.maps.Map(this.mapNode, mapOptions );
       this.map.addListener('click', (e) => {
-        this.addMarker(e.latLng);
+        this.checkTerrain(e.latLng);
       });
       this.map.setCenter({
         lat: pos.coords.latitude,
@@ -265,7 +297,7 @@ class CourseCreate extends React.Component {
      () => {
        this.map = new google.maps.Map(this.mapNode, mapOptions );
        this.map.addListener('click', (e) => {
-         this.addMarker(e.latLng);
+         this.checkTerrain(e.latLng);
        });
      }
     )

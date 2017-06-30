@@ -313,15 +313,9 @@ class ChartShow extends React.Component {
             <button onClick={this.openModal} className='chart-show-buttons'>
               <i className="fa fa-pencil" aria-hidden="true"></i>
             </button>
-            <div className='chart-dropdown'>
-              <button className='chart-show-buttons' className='chart-dropbtn'>
-                <i className="fa fa-wrench" aria-hidden="true"></i>
-              </button>
-              <ul className='chart-dropdown-content'>
-                <li><a href='twitter.com'>Share</a></li>
-                <li><button>Delete</button></li>
-              </ul>
-            </div>
+            <button className='chart-show-buttons'>
+              <i className="fa fa-wrench" aria-hidden="true"></i>
+            </button>
           </div>
           <div id='chart-show-body'>
             <h1 id='chart-show-header'>
