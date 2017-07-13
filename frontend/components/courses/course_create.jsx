@@ -7,6 +7,7 @@ import Modal from '../modal/modal';
 import merge from 'lodash/merge';
 import { clearErrors } from '../../actions/error_actions';
 const image = require('google-maps-image-api');
+var ch = require('convex-hull')
 
 class CourseCreate extends React.Component {
 
@@ -276,12 +277,12 @@ class CourseCreate extends React.Component {
     const startLat = this.startPos.lat();
     const startLng = this.startPos.lng();
 
-    const latDiffPx = 640 - pixelPos[0];
-    const lngDiffPx = pixelPos[1] - 640;
+    const latDiffPx = 640 - pixelPos[1];
+    const lngDiffPx = pixelPos[0] - 640;
 
     const center = [640, 640];
     const zoomLevel = 13;
-    const kmPerPx = (100000 * Math.cos(startLat * Math.PI / 180) / Math.pow(2, zoomLevel)) / 1000
+    const kmPerPx = (90000 * Math.cos(startLat * Math.PI / 180) / Math.pow(2, zoomLevel)) / 1000
 
     const latDiffKm = latDiffPx * kmPerPx;
     const lngDiffKm = lngDiffPx * kmPerPx;
@@ -295,9 +296,10 @@ class CourseCreate extends React.Component {
 
   checkBranchTerrain(startPos, headingBranch, waterContext, counter, isWaterArray, distMultiplier) {
     if (counter === 3) {
-      console.log(isWaterArray)
+      const isWaterLatLng = []
       isWaterArray.forEach((pos) => {
         const position = this.pixelsToLatLng(startPos, pos);
+        isWaterLatLng.push(position)
         new google.maps.Marker({
           position,
           map: this.map,
@@ -308,6 +310,7 @@ class CourseCreate extends React.Component {
           },
         });
       });
+      console.log(ch(isWaterArray))
       return isWaterArray
     }
     let nextBranchNodes = [];
@@ -319,7 +322,7 @@ class CourseCreate extends React.Component {
       }
     });
     if (nextBranchNodes.length === 8) {
-      distMultiplier += 0.3;
+      distMultiplier += 0.4;
       const nodeBranch = this.buildBranchDirs(startPos, distMultiplier);
       this.checkBranchTerrain(startPos, nodeBranch, waterContext, counter, isWaterArray, distMultiplier);
     } else {
