@@ -202,13 +202,134 @@ class CourseCreate extends React.Component {
     let remainingDist = google.maps.geometry.spherical.computeDistanceBetween(poly1, poly2)
     let startPos = poly1;
     this.isLand = false;
-    const promises = [];
     while (remainingDist > 321 && this.isLand === false) {
       let step = google.maps.geometry.spherical.computeOffset(startPos, 322, heading)
       remainingDist -= 322;
-      promises.push( this.checkStep(startPos) );
     };
-    Promise.all(promises);
+  }
+
+  calculateRiverHeading(startPos, endPos, counter, isWaterArray) {
+    this.startPos = startPos;
+    const headingBranch = this.buildBranchDirs(startPos);
+    this.buildTerrainChecker(startPos, headingBranch, counter, isWaterArray);
+  }
+
+  buildBranchDirs(startPos, distMultiplier = 1) {
+    let startLat;
+    if (startPos.lat) {
+      startLat = startPos.lat();
+    } else {
+      startLat = startPos[0]
+    }
+    const center = [640, 640];
+    const zoomLevel = 13;
+    const kilometersPerPixel = (100000 * Math.cos(startLat * Math.PI / 180) / Math.pow(2, zoomLevel)) / 1000
+    // kilometers per pixel = (156543.03392 * Math.cos(latLng.lat() * Math.PI / 180) / Math.pow(2, zoom)) / 1000
+    const checkDistancePx = (.428 / kilometersPerPixel) * distMultiplier
+    const branchDirs = [
+      [-checkDistancePx, -checkDistancePx],
+      [0, -checkDistancePx],
+      [checkDistancePx, -checkDistancePx],
+      [checkDistancePx, 0],
+      [checkDistancePx, checkDistancePx],
+      [0, checkDistancePx],
+      [-checkDistancePx, checkDistancePx],
+      [-checkDistancePx, 0]
+    ];
+    const returnBranch = [];
+
+    branchDirs.forEach((el) => {
+      const newLat = center[0] + el[0]
+      const newLng = center[1] + el[1]
+      returnBranch.push([newLat, newLng])
+    });
+    return returnBranch;
+  }
+
+  buildTerrainChecker(startPos, headingBranch, counter, isWaterArray) {
+    let waterCanvas = document.createElement('canvas');
+    waterCanvas.width = 1280;
+    waterCanvas.height = 1280;
+    let waterContext = waterCanvas.getContext('2d');
+
+    const latLng = `${startPos.lat()},${startPos.lng()}`
+    const xhr = new XMLHttpRequest();
+    const address = 'http://maps.googleapis.com/maps/api/staticmap?center=' + latLng + '&zoom=13&size=640x640&scale=2&visual_refresh=true&style=element:labels|visibility:off&style=feature:water|color:0x00FF00&style=feature:transit|visibility:off&style=feature:poi|visibility:off&style=feature:road|visibility:off&style=feature:administrative|visibility:off&sensor=false&key=AIzaSyBiE2efHKeAptVfVRtj9-ZDeHWPKgNjdNk';
+    xhr.open('GET', address);
+    xhr.responseType = "blob";
+    xhr.onload = () => onImageReceived(xhr.response);
+    xhr.send();
+    const onImageReceived = (imageBlob) => {
+      const urlCreator = window.URL || window.webkitURL;
+      const imageUrl = URL.createObjectURL(imageBlob);
+      let img = new Image;
+      img.src = imageUrl;
+      img.onload = () => {
+        waterContext.drawImage(img, 0, 0, img.width, img.height);
+        let distMultiplier = 1
+        this.checkBranchTerrain(startPos, headingBranch, waterContext, counter, isWaterArray, distMultiplier)
+        }
+      }
+  }
+
+  pixelsToLatLng(startPos, pixelPos ) {
+    const startLat = this.startPos.lat();
+    const startLng = this.startPos.lng();
+
+    const latDiffPx = 640 - pixelPos[0];
+    const lngDiffPx = pixelPos[1] - 640;
+
+    const center = [640, 640];
+    const zoomLevel = 13;
+    const kmPerPx = (100000 * Math.cos(startLat * Math.PI / 180) / Math.pow(2, zoomLevel)) / 1000
+
+    const latDiffKm = latDiffPx * kmPerPx;
+    const lngDiffKm = lngDiffPx * kmPerPx;
+    const rEarth = 6371;
+    const newLat = startLat + (latDiffKm / rEarth) * (180 / Math.PI);
+    const newLng = startLng + (lngDiffKm / rEarth) * (180 / Math.PI) / Math.cos(startLat * Math.PI/180);
+    const latLng = {lat: newLat, lng: newLng};
+    return latLng;
+  }
+
+
+  checkBranchTerrain(startPos, headingBranch, waterContext, counter, isWaterArray, distMultiplier) {
+    if (counter === 3) {
+      console.log(isWaterArray)
+      isWaterArray.forEach((pos) => {
+        const position = this.pixelsToLatLng(startPos, pos);
+        new google.maps.Marker({
+          position,
+          map: this.map,
+          icon: {
+            path: google.maps.SymbolPath.CIRCLE,
+            scale: 5,
+            strokeColor: '#0000ff'
+          },
+        });
+      });
+      return isWaterArray
+    }
+    let nextBranchNodes = [];
+    headingBranch.forEach((pos) => {
+      const pixel = waterContext.getImageData(pos[0], pos[1], 1, 1).data;
+      if (pixel[0] == 0 && pixel[1] == 255 && pixel[2] == 0) {
+        isWaterArray.push(pos)
+        nextBranchNodes.push(pos)
+      }
+    });
+    if (nextBranchNodes.length === 8) {
+      distMultiplier += 0.3;
+      const nodeBranch = this.buildBranchDirs(startPos, distMultiplier);
+      this.checkBranchTerrain(startPos, nodeBranch, waterContext, counter, isWaterArray, distMultiplier);
+    } else {
+      counter += 1;
+      nextBranchNodes.forEach((node) => {
+        distMultiplier = 1;
+        const nodeBranch = this.buildBranchDirs(node);
+        this.checkBranchTerrain(node, nodeBranch, waterContext, counter, isWaterArray)
+      });
+    }
   }
 
   renderPolyline(pathMarkers) {
@@ -220,6 +341,9 @@ class CourseCreate extends React.Component {
       path.push({ lat: pathMarkers[i].position.lat(), lng: pathMarkers[i].position.lng() });
     }
     //this.polylineSegmentor();
+    let counter = 1;
+    const isWaterArray = [];
+    this.calculateRiverHeading(pathMarkers[0].position, pathMarkers[1].position, counter, isWaterArray);
     const coursePoly = new google.maps.Polyline({
       path,
       geodesic: true,
