@@ -7,7 +7,8 @@ import Modal from '../modal/modal';
 import merge from 'lodash/merge';
 import { clearErrors } from '../../actions/error_actions';
 const image = require('google-maps-image-api');
-var ch = require('convex-hull')
+const convexHull = require('monotone-convex-hull-2d');
+const orientation = require("robust-orientation")
 
 class CourseCreate extends React.Component {
 
@@ -209,10 +210,10 @@ class CourseCreate extends React.Component {
     };
   }
 
-  calculateRiverHeading(startPos, endPos, counter, isWaterArray) {
+  calculateRiverHeading(startPos, endPos) {
     this.startPos = startPos;
     const headingBranch = this.buildBranchDirs(startPos);
-    this.buildTerrainChecker(startPos, headingBranch, counter, isWaterArray);
+    this.buildTerrainChecker(startPos, headingBranch);
   }
 
   buildBranchDirs(startPos, distMultiplier = 1) {
@@ -226,7 +227,7 @@ class CourseCreate extends React.Component {
     const zoomLevel = 13;
     const kilometersPerPixel = (100000 * Math.cos(startLat * Math.PI / 180) / Math.pow(2, zoomLevel)) / 1000
     // kilometers per pixel = (156543.03392 * Math.cos(latLng.lat() * Math.PI / 180) / Math.pow(2, zoom)) / 1000
-    const checkDistancePx = (.428 / kilometersPerPixel) * distMultiplier
+    const checkDistancePx = (.250 / kilometersPerPixel) * distMultiplier
     const branchDirs = [
       [-checkDistancePx, -checkDistancePx],
       [0, -checkDistancePx],
@@ -247,7 +248,7 @@ class CourseCreate extends React.Component {
     return returnBranch;
   }
 
-  buildTerrainChecker(startPos, headingBranch, counter, isWaterArray) {
+  buildTerrainChecker(startPos, headingBranch) {
     let waterCanvas = document.createElement('canvas');
     waterCanvas.width = 1280;
     waterCanvas.height = 1280;
@@ -267,8 +268,8 @@ class CourseCreate extends React.Component {
       img.src = imageUrl;
       img.onload = () => {
         waterContext.drawImage(img, 0, 0, img.width, img.height);
-        let distMultiplier = 1
-        this.checkBranchTerrain(startPos, headingBranch, waterContext, counter, isWaterArray, distMultiplier)
+        let distMultiplier = 1;
+        this.checkBranchTerrain(startPos, headingBranch, waterContext, distMultiplier)
         }
       }
   }
@@ -293,46 +294,123 @@ class CourseCreate extends React.Component {
     return latLng;
   }
 
+  checkBranchTerrain(startPos, headingBranch, waterContext, distMultiplier) {
+    const nextBranchNodes = this.nodeColorCheck(startPos, headingBranch, waterContext)
 
-  checkBranchTerrain(startPos, headingBranch, waterContext, counter, isWaterArray, distMultiplier) {
-    if (counter === 3) {
-      const isWaterLatLng = []
-      isWaterArray.forEach((pos) => {
-        const position = this.pixelsToLatLng(startPos, pos);
-        isWaterLatLng.push(position)
-        new google.maps.Marker({
-          position,
-          map: this.map,
-          icon: {
-            path: google.maps.SymbolPath.CIRCLE,
-            scale: 5,
-            strokeColor: '#0000ff'
-          },
-        });
+    if (nextBranchNodes.length > 6) {
+      this.isWaterArray = [];
+      distMultiplier += 2;
+      const nodeBranch = this.buildBranchDirs(startPos, distMultiplier);
+      this.checkBranchTerrain(startPos, nodeBranch, waterContext, distMultiplier);
+    } else {
+      this.isWaterArray = [];
+      distMultiplier = 1;
+      nextBranchNodes.forEach((node) => {
+        const nodeBranch = this.buildBranchDirs(node);
+        console.log(nodeBranch)
+        this.nodeColorCheck(node, nodeBranch, waterContext);
+        console.log(this.isWaterArray)
       });
-      console.log(ch(isWaterArray))
-      return isWaterArray
+
+    const isWaterLatLng = []
+    this.isWaterArray.forEach((pos) => {
+      const position = this.pixelsToLatLng(startPos, pos);
+      isWaterLatLng.push(position)
+      new google.maps.Marker({
+        position,
+        map: this.map,
+        icon: {
+          path: google.maps.SymbolPath.CIRCLE,
+          scale: 5,
+          strokeColor: '#0000ff'
+        },
+      });
+    });
+
+      const someDumbNewArray = isWaterLatLng.map((pos) => {
+        return [pos.lat, pos.lng]
+      })
+      const convexHullArray = convexHull(someDumbNewArray)
+      const anEvenDumberArray = [];
+      convexHullArray.forEach((index) => {
+        anEvenDumberArray.push(isWaterLatLng[index])
+      })
+    console.log(anEvenDumberArray)
+    console.log(orientation({anEvenDumberArray}))
+    //   const furthestMarkers = this.longestDist(anEvenDumberArray)
+    //   const marker1 = new google.maps.Marker({
+    //     position: {lat: furthestMarkers[0].lat, lng: furthestMarkers[0].lng}
+    //   })
+    //   const marker2 = new google.maps.Marker({
+    //     position: {lat: furthestMarkers[1].lat, lng: furthestMarkers[1].lng}
+    //   })
+      // const heading = google.maps.geometry.spherical.computeHeading(marker1.getPosition(), marker2.getPosition());
+      // console.log(heading)
+      // return heading;
+
     }
-    let nextBranchNodes = [];
-    headingBranch.forEach((pos) => {
+  }
+
+  nodeColorCheck(node, nodeBranch, waterContext) {
+    let nextNodes = [];
+    nodeBranch.forEach((pos) => {
       const pixel = waterContext.getImageData(pos[0], pos[1], 1, 1).data;
       if (pixel[0] == 0 && pixel[1] == 255 && pixel[2] == 0) {
-        isWaterArray.push(pos)
-        nextBranchNodes.push(pos)
+        this.isWaterArray.push(pos)
+        //console.log(this.isWaterArray)
+        nextNodes.push(pos)
       }
     });
-    if (nextBranchNodes.length === 8) {
-      distMultiplier += 0.4;
-      const nodeBranch = this.buildBranchDirs(startPos, distMultiplier);
-      this.checkBranchTerrain(startPos, nodeBranch, waterContext, counter, isWaterArray, distMultiplier);
-    } else {
-      counter += 1;
-      nextBranchNodes.forEach((node) => {
-        distMultiplier = 1;
-        const nodeBranch = this.buildBranchDirs(node);
-        this.checkBranchTerrain(node, nodeBranch, waterContext, counter, isWaterArray)
-      });
+    return nextNodes;
+  }
+
+  convexHullDistance(coord1, coord2) {
+    var p = 0.017453292519943295;    // Math.PI / 180
+    var c = Math.cos;
+    var a = 0.5 - c((coord2.lat() - coord1.lat()) * p)/2 +
+            c(coord1.lat() * p) * c(coord2.lat() * p) *
+            (1 - c((coord2.lng() - coord1.lng()) * p))/2;
+
+    return 12742 * Math.asin(Math.sqrt(a)); // 2 * R; R = 6371 km
+  }
+
+  longestDist(pointsArray) {
+    let furthestPoints;
+    let longestDistance = 0
+    for (let i = 0; i <= pointsArray.length; i++){
+      for (let j = i + 1; j < pointsArray.length; j++) {
+        const newDist = this.distanceFormula(pointsArray[i], pointsArray[j])
+        if ( newDist > longestDistance) {
+          longestDistance = newDist;
+          furthestPoints = [pointsArray[i], pointsArray[j]]
+        }
+      }
     }
+    return furthestPoints
+  }
+
+  distanceFormula(pos1, pos2) {
+    function toRad(x) {
+      return x * Math.PI / 180;
+    }
+
+    const lat1 = pos1.lat;
+    const lng1 = pos1.lng;
+    const lat2 = pos2.lat;
+    const lng2 = pos2.lng;
+    var R = 6371e3;
+    var φ1 = toRad(lat1);
+    var φ2 = toRad(lat2);
+    var Δφ = toRad((lat2-lat1));
+    var Δλ = toRad((lng2-lng1));
+
+    var a = Math.sin(Δφ/2) * Math.sin(Δφ/2) +
+            Math.cos(φ1) * Math.cos(φ2) *
+            Math.sin(Δλ/2) * Math.sin(Δλ/2);
+    var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+
+    var d = R * c;
+    return d;
   }
 
   renderPolyline(pathMarkers) {
@@ -344,9 +422,8 @@ class CourseCreate extends React.Component {
       path.push({ lat: pathMarkers[i].position.lat(), lng: pathMarkers[i].position.lng() });
     }
     //this.polylineSegmentor();
-    let counter = 1;
-    const isWaterArray = [];
-    this.calculateRiverHeading(pathMarkers[0].position, pathMarkers[1].position, counter, isWaterArray);
+    this.isWaterArray = [];
+    this.calculateRiverHeading(pathMarkers[0].position, pathMarkers[1].position)
     const coursePoly = new google.maps.Polyline({
       path,
       geodesic: true,
