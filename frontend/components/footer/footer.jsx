@@ -35,8 +35,8 @@ class Footer extends React.Component {
               <h2>Credits</h2>
               <ul>
                 <li>Design: <a href='https://strava.com'>Strava</a></li>
-                <li>Shoutouts: <a href='https://github.com/aAclee'>Calvin</a></li>
                 <li>Shoutouts: <a href='https://github.com/yosephha'>Yoseph</a></li>
+                <li>Shoutouts: <a href='https://github.com/aAclee'>Calvin</a></li>
               </ul>
             </li>
           </ul>
