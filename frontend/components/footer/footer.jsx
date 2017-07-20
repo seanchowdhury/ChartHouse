@@ -35,9 +35,8 @@ class Footer extends React.Component {
               <h2>Credits</h2>
               <ul>
                 <li>Design: <a href='https://strava.com'>Strava</a></li>
-                <li>Weather API: <a href='https://www.wunderground.com/weather/api/'>Wunderground</a></li>
-                <li>Current Data API: <a href='https://tidesandcurrents.noaa.gov/api/'>NOAA Tides and Currents</a></li>
-                <li>Map API: <a href='https://developers.google.com/maps/'>Google Maps</a></li>
+                <li>Shoutouts: <a href='https://github.com/aAclee'>Calvin</a></li>
+                <li>Shoutouts: <a href='https://github.com/yosephha'>Yoseph</a></li>
               </ul>
             </li>
           </ul>
