@@ -6,7 +6,7 @@ import { createChart } from '../../actions/charts_actions';
 import merge from 'lodash/merge';
 import { clearErrors } from '../../actions/error_actions';
 import DashboardNav from '../dashboard/dashboard_header';
-
+import Footer from '../footer/footer';
 
 class ChartCreate extends React.Component {
   constructor(props) {
@@ -157,6 +157,7 @@ class ChartCreate extends React.Component {
             </ul>
           </form>
         </div>
+        <Footer />
       </div>
     )
   }

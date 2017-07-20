@@ -1,0 +1,46 @@
+.footer-main {
+  border-top: 1px solid #dbdbdb;
+  display: flex;
+  justify-content: space-between;
+  padding: 35px 15% 0 15%;
+  margin-top: 35px;
+}
+
+.footer-logo {
+  font-family: 'Montserrat', sans-serif;
+  color: #999;
+  font-weight: 900;
+  font-size: 18px;
+  text-decoration: none;
+}
+
+.aesthetic-text {
+  margin-top: 5px;
+  color: #999;
+  font-size: 12px;
+}
+
+.footer-right {
+  display: flex;
+  color: #999;
+  font-size: 12px;
+}
+
+.footer-li {
+  margin-left: 90px;
+  line-height: 2.5em;
+}
+
+.footer-li h2 {
+  font-size: 16px;
+  margin-bottom: 20px;
+  color: #666;
+}
+
+.footer-li a {
+  color: #666;
+}
+
+.footer-li a:hover {
+  color: #000000;
+}

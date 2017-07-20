@@ -5,6 +5,7 @@ import values from 'lodash/values';
 import DashboardNav from '../dashboard/dashboard_header';
 import { requestCharts, deleteChart } from '../../actions/charts_actions';
 import { timeConverter } from '../../util/misc_util';
+import Footer from '../footer/footer';
 
 class ChartsIndex extends React.Component {
   constructor(props) {
@@ -86,6 +87,7 @@ class ChartsIndex extends React.Component {
               </tbody>
             </table>
         </div>
+        <Footer />
       </div>
     )
   }

@@ -3,13 +3,6 @@ import { Link, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { logout } from '../../actions/session_actions';
 
-const DashboardMenu = () => (
-  <div>
-    <li className='dropdown-link'><Link to='/crewactivity'>Activity Feed</Link></li>
-    <li className='dropdown-link'><Link to='/courses'>Courses</Link></li>
-    </div>
-)
-
 class DashboardNav extends React.Component {
   constructor(props) {
     super(props);

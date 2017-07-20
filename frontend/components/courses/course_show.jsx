@@ -5,6 +5,7 @@ import { withRouter, Link } from 'react-router-dom';
 import { requestCourse } from '../../actions/courses_actions';
 import { timeConverter } from '../../util/misc_util';
 import DashboardNav from '../dashboard/dashboard_header';
+import Footer from '../footer/footer';
 
 
 class CourseShow extends React.Component {
@@ -215,6 +216,7 @@ class CourseShow extends React.Component {
             </div>
           </div>
         </div>
+        <Footer />
       </div>
     )
   }

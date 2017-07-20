@@ -6,6 +6,7 @@ import DashboardNav from '../dashboard/dashboard_header';
 import { requestCourses } from '../../actions/courses_actions';
 import Map from '../map/map';
 import { timeConverter } from '../../util/misc_util';
+import Footer from '../footer/footer';
 
 class CoursesIndex extends React.Component {
   constructor(props) {
@@ -65,6 +66,7 @@ class CoursesIndex extends React.Component {
           </div>
           <ul className='map-cards'>{courseList}</ul>
         </div>
+        <Footer />
       </div>
      );
   }

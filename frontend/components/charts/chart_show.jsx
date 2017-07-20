@@ -7,6 +7,7 @@ import { requestChart, editChart } from '../../actions/charts_actions';
 import { timeConverter } from '../../util/misc_util';
 import Modal from '../modal/modal';
 import {merge} from 'lodash'
+import Footer from '../footer/footer';
 import * as ApiUtil from '../../util/charts_api_util';
 
 class ChartShow extends React.Component {
@@ -363,6 +364,7 @@ class ChartShow extends React.Component {
             </div>
           </div>
         </div>
+        <Footer />
       </div>
     )
   }

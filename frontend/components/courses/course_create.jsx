@@ -8,7 +8,7 @@ import merge from 'lodash/merge';
 import { clearErrors } from '../../actions/error_actions';
 const image = require('google-maps-image-api');
 const convexHull = require('monotone-convex-hull-2d');
-const orientation = require("robust-orientation")
+import regression from 'regression';
 
 class CourseCreate extends React.Component {
 
@@ -17,12 +17,14 @@ class CourseCreate extends React.Component {
     this.pathMarkers = [];
     this.distance = 0;
     this.polyline = 0;
+    this.toggleHeading = false;
     this.saveMap = this.saveMap.bind(this);
     this.clearAll = this.clearAll.bind(this);
     this.renderPolyline = this.renderPolyline.bind(this);
     this.addMarker = this.addMarker.bind(this);
     this.checkTerrain = this.checkTerrain.bind(this);
     this.undoMarker = this.undoMarker.bind(this);
+    this._toggleHeading = this._toggleHeading.bind(this);
     let today = new Date();
     let dd = today.getDate();
     let mm = today.getMonth()+1;
@@ -307,24 +309,13 @@ class CourseCreate extends React.Component {
       distMultiplier = 1;
       nextBranchNodes.forEach((node) => {
         const nodeBranch = this.buildBranchDirs(node);
-        console.log(nodeBranch)
         this.nodeColorCheck(node, nodeBranch, waterContext);
-        console.log(this.isWaterArray)
       });
 
     const isWaterLatLng = []
     this.isWaterArray.forEach((pos) => {
       const position = this.pixelsToLatLng(startPos, pos);
       isWaterLatLng.push(position)
-      new google.maps.Marker({
-        position,
-        map: this.map,
-        icon: {
-          path: google.maps.SymbolPath.CIRCLE,
-          scale: 5,
-          strokeColor: '#0000ff'
-        },
-      });
     });
 
       const someDumbNewArray = isWaterLatLng.map((pos) => {
@@ -335,8 +326,62 @@ class CourseCreate extends React.Component {
       convexHullArray.forEach((index) => {
         anEvenDumberArray.push(isWaterLatLng[index])
       })
-    console.log(anEvenDumberArray)
-    console.log(orientation({anEvenDumberArray}))
+      isWaterLatLng.forEach((pos) => {
+        new google.maps.Marker({
+          position: pos,
+          map: this.map,
+          icon: {
+            path: google.maps.SymbolPath.CIRCLE,
+            scale: 5,
+            strokeColor: '#0000ff'
+          },
+        });
+      });
+
+      const yosephArray = [];
+      const latHash = {}
+      const lngHash = {};
+      isWaterLatLng.forEach((pos) => {
+        latHash[pos.lat] = []
+        lngHash[pos.lng] = []
+      })
+      isWaterLatLng.forEach((pos) => {
+        latHash[pos.lat].push(pos.lng)
+        lngHash[pos.lng].push(pos.lat)
+      })
+      let maxLatDist = 0;
+      let maxLngDist = 0;
+      Object.values(latHash).forEach((array) => {
+        const curr_diff = Math.max(...array) - Math.min(...array);
+        if ( curr_diff > maxLatDist){
+          maxLatDist = curr_diff;
+        }
+      })
+      Object.values(lngHash).forEach((array) => {
+        const curr_diff = Math.max(...array) - Math.min(...array);
+        if ( curr_diff > maxLatDist){
+          maxLngDist = curr_diff;
+        }
+      })
+      let flipped = false;
+      isWaterLatLng.forEach((pos) => {
+        if (maxLatDist > maxLngDist) {
+          yosephArray.push([pos.lat, pos.lng])
+        } else {
+          flipped = true;
+          yosephArray.push([pos.lng, pos.lat])
+        }
+      })
+      const result = regression.linear(yosephArray);
+      let riverAngle = (Math.atan(result.equation[0]) * 180) / Math.PI;
+      if (flipped) {
+        if (riverAngle == 0) {
+          riverAngle == 90
+        } else {
+          riverAngle += 45;
+        }
+      }
+      console.log(riverAngle);
     //   const furthestMarkers = this.longestDist(anEvenDumberArray)
     //   const marker1 = new google.maps.Marker({
     //     position: {lat: furthestMarkers[0].lat, lng: furthestMarkers[0].lng}
@@ -413,6 +458,12 @@ class CourseCreate extends React.Component {
     return d;
   }
 
+  _toggleHeading(e) {
+    if (e.key === 'h') {
+      this.toggleHeading = !this.toggleHeading;
+    }
+  }
+
   renderPolyline(pathMarkers) {
     if (this.polyline) {
       this.polyline.setMap(null);
@@ -422,8 +473,10 @@ class CourseCreate extends React.Component {
       path.push({ lat: pathMarkers[i].position.lat(), lng: pathMarkers[i].position.lng() });
     }
     //this.polylineSegmentor();
-    this.isWaterArray = [];
-    this.calculateRiverHeading(pathMarkers[0].position, pathMarkers[1].position)
+    if (this.toggleHeading) {
+      this.isWaterArray = [];
+      this.calculateRiverHeading(pathMarkers[0].position, pathMarkers[1].position)
+    }
     const coursePoly = new google.maps.Polyline({
       path,
       geodesic: true,
@@ -636,7 +689,7 @@ class CourseCreate extends React.Component {
     }
 
     return (
-      <div id='create-page-container'>
+      <div id='create-page-container' onKeyPress={this._toggleHeading} >
         <div>
           <Modal className='save-modal' isOpen={this.state.isModalOpen} onClose={() => this.closeModal()}>
             <h1 className='save-title'>Save</h1>

@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { signup, login } from '../../actions/session_actions';
 import { clearErrors } from '../../actions/error_actions';
 import values from 'lodash/values';
+import Footer from '../footer/footer';
 
 class Auth extends React.Component {
   constructor(props) {
