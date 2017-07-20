@@ -203,16 +203,6 @@ class CourseShow extends React.Component {
                 </ul>
               </div>
               <div className={bottomBorder}>{this.props.course.description}</div>
-              <div className='show-stats-social'>Share this Course with Friends
-                <ul>
-                  <li><button>Friends?</button></li>
-                  <li><button>Did</button></li>
-                  <li><button>I</button></li>
-                  <li><button>Not</button></li>
-                  <li><button>Import</button></li>
-                  <li><button>That?</button></li>
-                </ul>
-              </div>
             </div>
           </div>
         </div>
