@@ -217,7 +217,7 @@ class ChartShow extends React.Component {
     const queryLocation = `${waypoints[0].lat},${waypoints[0].lng}`
     $.ajax({
       type: 'GET',
-      url: `http://api.wunderground.com/api/0f6b676260939449/history_${queryDate}/q/${queryLocation}.json`
+      url: `https://api.wunderground.com/api/0f6b676260939449/history_${queryDate}/q/${queryLocation}.json`
     }).then( (weatherData) => this.renderWeather(weatherData))
   }
 
