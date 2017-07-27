@@ -1,7 +1,7 @@
 # KUNKKA
 
 
-[Kunkka](https://www.charthouse.herokuapp.com/)
+[Kunkka](https://www.kunkka.herokuapp.com/)
 
 
 Kunkka is full-stack web application clone of Strava, created using Ruby on Rails on the backend with a PostgreSQL database and React.js with a Redux architectural framework on the frontend. Users are able to plan out their courses and keep track of the trips they have taken.
