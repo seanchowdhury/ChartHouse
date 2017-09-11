@@ -14,17 +14,18 @@ class CourseCreate extends React.Component {
 
   constructor(props) {
     super(props);
-    this.pathMarkers = [];
-    this.distance = 0;
-    this.polyline = 0;
-    this.toggleHeading = false;
-    this.saveMap = this.saveMap.bind(this);
-    this.clearAll = this.clearAll.bind(this);
-    this.renderPolyline = this.renderPolyline.bind(this);
-    this.addMarker = this.addMarker.bind(this);
-    this.checkTerrain = this.checkTerrain.bind(this);
-    this.undoMarker = this.undoMarker.bind(this);
-    this._toggleHeading = this._toggleHeading.bind(this);
+    this.pathMarkers = []
+    this.distance = 0
+    this.polyline = 0
+    this.toggleHeading = false
+    this.saveMap = this.saveMap.bind(this)
+    this.clearAll = this.clearAll.bind(this)
+    this.renderPolyline = this.renderPolyline.bind(this)
+    this.addMarker = this.addMarker.bind(this)
+    this.checkTerrain = this.checkTerrain.bind(this)
+    this.undoMarker = this.undoMarker.bind(this)
+    this._toggleHeading = this._toggleHeading.bind(this)
+    this.findCurrent = this.findCurrent.bind(this)
     let today = new Date();
     let dd = today.getDate();
     let mm = today.getMonth()+1;
@@ -188,13 +189,33 @@ class CourseCreate extends React.Component {
          if (HELLYEA[0] === 163 && HELLYEA[1] === 204 && HELLYEA[2] === 255) {
            () => {};
          } else {
-          this.isLand = true;
+          this.isLand = true
          }
-       };
-
+       }
        img.id = 'terrain'
        img.src = imageUrl
 
+    }
+  }
+
+  findStation(pos) {
+
+  }
+
+  findCurrent(pos) {
+    const startLat = pos.lat()
+    const startLng = pos.lng()
+    const date = this.state.date.slice(0,4) + this.state.date.slice(5,7) + this.state.date.slice(8,10)
+    const noaaRequest = new XMLHttpRequest()
+    debugger
+    const address = `https://tidesandcurrents.noaa.gov/api/datagetter?begin_date=${date}&range=24&station=n03020&product=water_temperature&units=english&time_zone=gmt&application=ports_screen&format=json`
+    noaaRequest.open('GET', address)
+    noaaRequest.onload = () => onJSONReceived(noaaRequest.response)
+    noaaRequest.send();
+
+    const onJSONReceived = (response) => {
+      console.log(response)
+      //debugger
     }
   }
 
@@ -472,6 +493,7 @@ class CourseCreate extends React.Component {
     for (let i = 0; i < pathMarkers.length; i++){
       path.push({ lat: pathMarkers[i].position.lat(), lng: pathMarkers[i].position.lng() });
     }
+    this.findCurrent(pathMarkers[0].position)
     //this.polylineSegmentor();
     if (this.toggleHeading) {
       this.isWaterArray = [];
