@@ -1,10 +1,8 @@
 # KUNKKA
 
-
-[Kunkka](https://www.kunkka.herokuapp.com/)
-
-
 Kunkka is full-stack web application clone of Strava, created using Ruby on Rails on the backend with a PostgreSQL database and React.js with a Redux architectural framework on the frontend. Users are able to plan out their courses and keep track of the trips they have taken.
+
+[Live](https://www.kunkka.herokuapp.com/)
 
 ## Features and implementation
 
@@ -75,6 +73,14 @@ clearAll() {
   this.setState( {course: merge({}, this.state.course, {distance: 0, esttime: 0} )});
 }
 ```
+
+### River Heading
+
+One of the largest challenges of the project was finding the heading of a given river. Because the river's current only effect's the user's course in the vector that is parallel with that river, finding the angle of the river was required to offset the user's course. To do this I implemented a custom mapping algorithm that begins at the user's position and uses the terrain detection illustrated above to draw a rough shape of that section of river. Then using a linear regression I am able to calculate the river heading. Below is an example of algorithm in use:
+
+![wow](/app/assets/images/river_heading_demo.png)
+
+The green dot is the user's starting point and the blue are markers placed by the algorithm as it blooms outward to try and shape the terrain. 
 
 ## Future Directions for the Project
 
