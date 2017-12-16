@@ -16,7 +16,7 @@ class Api::SessionsController < ApplicationController
       elsif params['user']['email'].length == 0
         errors = { email: ["Email cannot be blank"]}
       elsif params['user']['password'].length == 0
-        errors = { password: ["Email cannot be blank"]}
+        errors = { password: ["Password cannot be blank"]}
       end
 			render(
         json: errors,
